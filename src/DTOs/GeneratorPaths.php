@@ -24,5 +24,5 @@ class GeneratorPaths
     public string $routes;
     public string $views;
 
-    public string $services;
+    public string $service;
 }
