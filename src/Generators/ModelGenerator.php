@@ -40,6 +40,7 @@ class ModelGenerator extends BaseGenerator
     {
         return [
             'fillables'        => implode(','.infy_nl_tab(1, 2), $this->generateFillables()),
+            'properties'       => $this->generateFillables(),
             'casts'            => implode(','.infy_nl_tab(1, 2), $this->generateCasts()),
             'rules'            => implode(','.infy_nl_tab(1, 2), $this->generateRules()),
             'swaggerDocs'      => $this->fillDocs(),

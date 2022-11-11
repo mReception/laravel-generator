@@ -10,9 +10,10 @@ use Illuminate\Database\Eloquent\Model;
 
 @if(isset($swaggerDocs)){!! $swaggerDocs  !!}@endif
 
-/** Eloquent Model for {{ $config->tableName }}
-@foreach(explode($fillables,",") as $field)
- * @property ${{ str_replace("'","",$field) }}
+/** Eloquent Model for '{{ $config->tableName }}' table
+ * @property int $id
+@foreach($properties as $property)
+ * @property ${{ $property }}
 @endforeach
 */
 class {{ $config->modelNames->name }} extends Model
