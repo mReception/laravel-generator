@@ -31,17 +31,14 @@ class {{ $config->modelNames->name }}ManageService extends BaseService
     /**
      * Update the specified {{ $config->modelNames->name }} in storage.
      *
-     * @param  {{ $config->modelNames->name }} $model
      * @param  array $input
+     * @param int $id
      *
      * @return {{ $config->modelNames->name }}
      */
-    public function update({{ $config->modelNames->name }} $model, array $input): {{ $config->modelNames->name }}
+    public function update(array $input, int $id): {{ $config->modelNames->name }}
     {
-        /** @var {{ $config->modelNames->name }} ${{ $config->modelNames->camel }} */
-        ${{ $config->modelNames->camel }} = parent::update($model, $input);
-
-        return ${{ $config->modelNames->camel }};
+        return= parent::update($input, $id);
     }
 
     /**
@@ -54,6 +51,6 @@ class {{ $config->modelNames->name }}ManageService extends BaseService
      */
     public function delete($id): void
     {
-        parent::delete($model, $input);
+        return parent::delete($id);
     }
 }
