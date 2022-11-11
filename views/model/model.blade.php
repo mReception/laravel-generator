@@ -11,8 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 @if(isset($swaggerDocs)){!! $swaggerDocs  !!}@endif
 
 /** Eloquent Model for {{ $config->tableName }}
-@foreach($fillables as $field)
- * @property ${{ $field }}
+@foreach(explode($fillables,",") as $field)
+ * @property ${{ str_replace("'","",$field) }}
 @endforeach
 */
 class {{ $config->modelNames->name }} extends Model
