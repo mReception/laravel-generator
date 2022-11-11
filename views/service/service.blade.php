@@ -6,6 +6,8 @@ namespace {{ $config->namespaces->service }};
 
 use App\Services\BaseService;
 use {{ $config->namespaces->repository }}\{{ $config->modelNames->name }}Repository;
+use {{ $config->namespaces->repository }}\{{ $config->modelNames->name }}Repository;
+use {{ $config->namespaces->model }}\{{ $config->modelNames->name }};
 
 class {{ $config->modelNames->name }}ManageService extends BaseService
 {
@@ -17,19 +19,20 @@ class {{ $config->modelNames->name }}ManageService extends BaseService
     /**
      * Store a newly created {{ $config->modelNames->name }} in storage.
      *
+     * @param  array $input
+     *
      * @return {{ $config->modelNames->name }}
      */
-    public function create(array $input): /** @var {{ $config->modelNames->name }}
+    public function create(array $input): {{ $config->modelNames->name }}
     {
-
-        /** @var {{ $config->modelNames->name }} ${{ $config->modelNames->camel }} */
-        ${{ $config->modelNames->camel }} = parent::create($input);
-
-        return ${{ $config->modelNames->camel }};
+        return parent::create($input);
     }
 
     /**
      * Update the specified {{ $config->modelNames->name }} in storage.
+     *
+     * @param  {{ $config->modelNames->name }} $model
+     * @param  array $input
      *
      * @return {{ $config->modelNames->name }}
      */
@@ -43,6 +46,9 @@ class {{ $config->modelNames->name }}ManageService extends BaseService
 
     /**
      * Remove the specified {{ $config->modelNames->name }} from storage.
+     * @param int $id
+     *
+     * @return void
      *
      * @throws \Exception
      */

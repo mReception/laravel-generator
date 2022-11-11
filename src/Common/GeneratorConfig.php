@@ -204,7 +204,7 @@ class GeneratorConfig
         $namespaces->app = substr($namespaces->app, 0, strlen($namespaces->app) - 1);
         $namespaces->repository = config('laravel_generator.namespace.repository', 'App\Repositories').$prefix;
         $namespaces->model = config('laravel_generator.namespace.model', 'App\Models').$prefix;
-        $namespaces->service = config('laravel_generator.path.service', app_path('App\Services')).$prefix;
+        $namespaces->service = config('laravel_generator.namespace.service', 'App\Services').$prefix;
         $namespaces->seeder = config('laravel_generator.namespace.seeder', 'Database\Seeders').$prefix;
         $namespaces->factory = config('laravel_generator.namespace.factory', 'Database\Factories').$prefix;
         $namespaces->dataTables = config('laravel_generator.namespace.datatables', 'App\DataTables').$prefix;
