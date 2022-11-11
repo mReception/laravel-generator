@@ -27,4 +27,6 @@ class GeneratorNamespaces
     public string $repositoryTests;
     public string $testTraits;
     public string $tests;
+
+    public string $services;
 }

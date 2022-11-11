@@ -73,6 +73,11 @@ class BaseCommand extends Command
             $repositoryGenerator->generate();
         }
 
+        if (!$this->isSkip('service')) {
+            $serviceGenerator = app(ServiceGenerator::class);
+            $serviceGenerator->generate();
+        }
+
         if ($this->config->options->factory || (!$this->isSkip('tests') and $this->config->options->tests)) {
             $factoryGenerator = app(FactoryGenerator::class);
             $factoryGenerator->generate();

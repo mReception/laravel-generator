@@ -16,13 +16,10 @@ use Flash;
 
 class {{ $config->modelNames->name }}Controller extends AppBaseController
 {
-    /** @var {{ $config->modelNames->name }}Repository ${{ $config->modelNames->camel }}Repository*/
-    private ${{ $config->modelNames->camel }}Repository;
-
-    public function __construct({{ $config->modelNames->name }}Repository ${{ $config->modelNames->camel }}Repo)
-    {
-        $this->{{ $config->modelNames->camel }}Repository = ${{ $config->modelNames->camel }}Repo;
-    }
+    public function __construct(
+        private readonly {{ $config->modelNames->name }}Repository ${{ $config->modelNames->camel }}Repo,
+        private readonly {{ $config->modelNames->name }}Service ${{ $config->modelNames->camel }}Service
+    ) {}
 
     /**
      * Display a listing of the {{ $config->modelNames->name }}.
@@ -44,7 +41,8 @@ class {{ $config->modelNames->name }}Controller extends AppBaseController
     {
         $input = $request->all();
 
-        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}Repository->create($input);
+        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}Service->create($input);
+        $this->{{ $config->modelNames->camel }}Repo->save(${{ $config->modelNames->camel }});
 
         @include('laravel-generator::scaffold.controller.messages.save_success')
 
@@ -84,7 +82,8 @@ class {{ $config->modelNames->name }}Controller extends AppBaseController
 
         @include('laravel-generator::scaffold.controller.messages.not_found')
 
-        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}Repository->update($request->all(), $id);
+        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}Service->update($request->all(), $id);
+        $this->{{ $config->modelNames->camel }}Repo->save(${{ $config->modelNames->camel }});
 
         @include('laravel-generator::scaffold.controller.messages.update_success')
 

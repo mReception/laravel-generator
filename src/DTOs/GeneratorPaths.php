@@ -23,4 +23,6 @@ class GeneratorPaths
     public string $request;
     public string $routes;
     public string $views;
+
+    public string $services;
 }

@@ -9,6 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 @if($config->options->tests) {{ 'use Illuminate\Database\Eloquent\Factories\HasFactory;' }};@endif
 
 @if(isset($swaggerDocs)){!! $swaggerDocs  !!}@endif
+
+/** Eloquent Model for {{ $config->tableName }}
+@foreach($fillables as $field)
+ * @property ${{ $field }}
+@endforeach
+*/
 class {{ $config->modelNames->name }} extends Model
 {
 @if($config->options->softDelete) {{ infy_tab().'use SoftDeletes;' }}@endif
