@@ -185,6 +185,8 @@ class GeneratorConfig
             app_path('Providers/ViewServiceProvider.php')
         );
 
+        $paths->service = config('laravel_generator.path.service', app_path('Services/')).$namespacePrefix;
+
         $this->paths = $paths;
     }
 
@@ -202,6 +204,7 @@ class GeneratorConfig
         $namespaces->app = substr($namespaces->app, 0, strlen($namespaces->app) - 1);
         $namespaces->repository = config('laravel_generator.namespace.repository', 'App\Repositories').$prefix;
         $namespaces->model = config('laravel_generator.namespace.model', 'App\Models').$prefix;
+        $namespaces->service = config('laravel_generator.path.service', app_path('App\Services')).$prefix;
         $namespaces->seeder = config('laravel_generator.namespace.seeder', 'Database\Seeders').$prefix;
         $namespaces->factory = config('laravel_generator.namespace.factory', 'Database\Factories').$prefix;
         $namespaces->dataTables = config('laravel_generator.namespace.datatables', 'App\DataTables').$prefix;
@@ -271,6 +274,7 @@ class GeneratorConfig
         $options->localized = config('laravel_generator.options.localized', false);
         $options->repositoryPattern = config('laravel_generator.options.repository_pattern', true);
         $options->resources = config('laravel_generator.options.resources', false);
+        $options->service = config('laravel_generator.options.service', true);
         $options->factory = config('laravel_generator.options.factory', false);
         $options->seeder = config('laravel_generator.options.seeder', false);
         $options->swagger = config('laravel_generator.options.swagger', false);

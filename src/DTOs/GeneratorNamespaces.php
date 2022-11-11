@@ -28,5 +28,5 @@ class GeneratorNamespaces
     public string $testTraits;
     public string $tests;
 
-    public string $services;
+    public string $service;
 }
