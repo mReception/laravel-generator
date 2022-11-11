@@ -54,6 +54,8 @@ return [
         'views'             => resource_path('views/'),
 
         'menu_file'         => resource_path('views/layouts/menu.blade.php'),
+
+        'service'           => app_path('Services/'),
     ],
 
     /*
@@ -92,6 +94,8 @@ return [
         'repository_test'   => 'Tests\Repositories',
 
         'api_test'          => 'Tests\APIs',
+
+        'service'             => 'App\Services',
     ],
 
     /*
@@ -134,21 +138,23 @@ return [
 
         'save_schema_file' => true,
 
-        'localized' => false,
+        'localized' => true,
 
         'repository_pattern' => true,
 
         'resources' => false,
 
-        'factory' => false,
+        'factory' => true,
 
-        'seeder' => false,
+        'seeder' => true,
 
         'swagger' => false, // generate swagger for your APIs
 
-        'tests' => false, // generate test cases for your APIs
+        'tests' => true, // generate test cases for your APIs
 
         'excluded_fields' => ['id'], // Array of columns that doesn't required while creating module
+
+        'services' => true,
     ],
 
     /*
