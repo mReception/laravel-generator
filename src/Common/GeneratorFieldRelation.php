@@ -108,14 +108,14 @@ class GeneratorFieldRelation
                 break;
         }
 
-        if (!empty($functionName) and !empty($isArray)) {
+        if (!empty($functionName)) {
             return $this->generateRelationProperty($functionName, $isArray);
         }
 
         return '';
     }
 
-    protected function generateRelation($functionName, $relation, $relationClass)
+    protected function generateRelation($functionName, $relation, $relationClass): string
     {
         $inputs = $this->inputs;
         $relatedModelName = array_shift($inputs);
@@ -126,14 +126,6 @@ class GeneratorFieldRelation
         } else {
             $inputFields = '';
         }
-
-        $this->relationsArray = [
-            'relationClass' => $relationClass,
-            'functionName'  => $functionName,
-            'relation'      => $relation,
-            'relatedModel'  => $relatedModelName,
-            'fields'        => $inputFields,
-        ];
 
         return view('laravel-generator::model.relationship', [
             'relationClass' => $relationClass,
