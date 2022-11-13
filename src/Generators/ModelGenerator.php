@@ -373,11 +373,11 @@ class ModelGenerator extends BaseGenerator
 
             switch (strtolower($field->dbType)) {
                 case 'integer':
-                case 'biginteger unsigned':
+                case 'bigint unsigned':
                 case 'increments':
-                case 'smallinteger':
+                case 'smallint':
                 case 'long':
-                case 'biginteger':
+                case 'bigint':
                     $type = "int";
                     break;
                 case 'double':

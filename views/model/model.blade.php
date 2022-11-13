@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 @if(isset($swaggerDocs)){!! $swaggerDocs  !!}@endif
 
 /** Eloquent Model for '{{ $config->tableName }}' table
- * @property int $id
 @foreach($properties as $name => $property)
  * @property {{ $property['type'] }} ${{ $name }}
 @endforeach
