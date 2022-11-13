@@ -12,8 +12,11 @@ use Illuminate\Database\Eloquent\Model;
 
 /** Eloquent Model for '{{ $config->tableName }}' table
  * @property int $id
-@foreach($properties as $property)
- * @property ${{ $property }}
+@foreach($properties as $name => $property)
+ * @property {{ $property['type'] }} ${{ $name }}
+@endforeach
+@foreach($relations as $relation)
+ * @property {{ $relation['relationClass'] }} {{ $config->getRelationArrayOrNot($relation['relationClass'])  }} ${{ $relation['functionName'] }}
 @endforeach
 */
 class {{ $config->modelNames->name }} extends Model

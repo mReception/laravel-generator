@@ -29,6 +29,10 @@ class GeneratorPublishCommand extends PublishBaseCommand
         if ($repositoryPattern) {
             $this->publishBaseRepository();
         }
+        $servicePattern = config('laravel_generator.options.service_pattern', true);
+        if ($servicePattern) {
+            $this->publishBaseService();
+        }
         if ($this->option('localized')) {
             $this->publishLocaleFiles();
         }
@@ -126,6 +130,27 @@ class GeneratorPublishCommand extends PublishBaseCommand
         g_filesystem()->createFile($repositoryPath.$fileName, $templateData);
 
         $this->info('BaseRepository created');
+    }
+
+    private function publishBaseService()
+    {
+        $servicePath = app_path('Services/');
+
+        $fileName = 'BaseService.php';
+
+        if (file_exists($servicePath.$fileName) && !$this->confirmOverwrite($fileName)) {
+            return;
+        }
+
+        g_filesystem()->createDirectoryIfNotExist($servicePath);
+
+        $templateData = view('laravel-generator::stubs.base_service', [
+            'namespaceApp' => $this->getLaravel()->getNamespace(),
+        ])->render();
+
+        g_filesystem()->createFile($servicePath.$fileName, $templateData);
+
+        $this->info('BaseService created');
     }
 
     private function publishLocaleFiles()

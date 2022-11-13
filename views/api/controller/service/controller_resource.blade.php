@@ -8,19 +8,19 @@ use {{ $config->namespaces->apiRequest }}\Create{{ $config->modelNames->name }}A
 use {{ $config->namespaces->apiRequest }}\Update{{ $config->modelNames->name }}APIRequest;
 use {{ $config->namespaces->model }}\{{ $config->modelNames->name }};
 use {{ $config->namespaces->repository }}\{{ $config->modelNames->name }}Repository;
+use {{ $config->namespaces->service }}\{{ $config->modelNames->name }}Service;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use {{ $config->namespaces->app }}\Http\Controllers\AppBaseController;
+use {{ $config->namespaces->apiResource }}\{{ $config->modelNames->name }}Resource;
 
 {!! $docController !!}
 class {{ $config->modelNames->name }}APIController extends AppBaseController
 {
-    private {{ $config->modelNames->name }}Repository ${{ $config->modelNames->camel }}Repository;
-
-    public function __construct({{ $config->modelNames->name }}Repository ${{ $config->modelNames->camel }}Repo)
-    {
-        $this->{{ $config->modelNames->camel }}Repository = ${{ $config->modelNames->camel }}Repo;
-    }
+    public function __construct(
+        private readonly {{ $config->modelNames->name }}Repository ${{ $config->modelNames->camel }}Repository,
+        private readonly {{ $config->modelNames->name }}Service ${{ $config->modelNames->camel }}Service
+    ) {}
 
     {!! $docIndex !!}
     public function index(Request $request): JsonResponse
@@ -33,11 +33,11 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
 
 @if($config->options->localized)
         return $this->sendResponse(
-            ${{ $config->modelNames->camelPlural }}->toArray(),
+            {{ $config->modelNames->name }}Resource::collection(${{ $config->modelNames->camelPlural }}),
             __('messages.retrieved', ['model' => __('models/{{ $config->modelNames->camelPlural }}.plural')])
         );
 @else
-        return $this->sendResponse(${{ $config->modelNames->camelPlural }}->toArray(), '{{ $config->modelNames->humanPlural }} retrieved successfully');
+        return $this->sendResponse({{ $config->modelNames->name }}Resource::collection(${{ $config->modelNames->camelPlural }}), '{{ $config->modelNames->humanPlural }} retrieved successfully');
 @endif
     }
 
@@ -46,15 +46,15 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
     {
         $input = $request->all();
 
-        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}Repository->create($input);
+        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}Service->create($input);
 
 @if($config->options->localized)
         return $this->sendResponse(
-            ${{ $config->modelNames->camel }}->toArray(),
+            new {{ $config->modelNames->name }}Resource(${{ $config->modelNames->camel }}),
             __('messages.saved', ['model' => __('models/{{ $config->modelNames->camelPlural }}.singular')])
         );
 @else
-        return $this->sendResponse(${{ $config->modelNames->camel }}->toArray(), '{{ $config->modelNames->human }} saved successfully');
+        return $this->sendResponse(new {{ $config->modelNames->name }}Resource(${{ $config->modelNames->camel }}), '{{ $config->modelNames->human }} saved successfully');
 @endif
     }
 
@@ -67,7 +67,7 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
         if (empty(${{ $config->modelNames->camel }})) {
 @if($config->options->localized)
             return $this->sendError(
-                __('messages.not_found', ['model' => __('models/$MODEL_NAME_PLURAL_CAMEL$.singular')])
+                __('messages.not_found', ['model' => __('models/{{ $config->modelNames->camelPlural }}.singular')])
             );
 @else
             return $this->sendError('{{ $config->modelNames->human }} not found');
@@ -76,11 +76,11 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
 
 @if($config->options->localized)
         return $this->sendResponse(
-            ${{ $config->modelNames->camel }}->toArray(),
+            new {{ $config->modelNames->name }}Resource(${{ $config->modelNames->camel }}),
             __('messages.retrieved', ['model' => __('models/{{ $config->modelNames->camelPlural }}.singular')])
         );
 @else
-        return $this->sendResponse(${{ $config->modelNames->camel }}->toArray(), '{{ $config->modelNames->human }} retrieved successfully');
+        return $this->sendResponse(new {{ $config->modelNames->name }}Resource(${{ $config->modelNames->camel }}), '{{ $config->modelNames->human }} retrieved successfully');
 @endif
     }
 
@@ -95,22 +95,22 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
         if (empty(${{ $config->modelNames->camel }})) {
 @if($config->options->localized)
             return $this->sendError(
-                __('messages.not_found', ['model' => __('models/$MODEL_NAME_PLURAL_CAMEL$.singular')])
+                __('messages.not_found', ['model' => __('models/{{ $config->modelNames->camelPlural }}.singular')])
             );
 @else
             return $this->sendError('{{ $config->modelNames->human }} not found');
 @endif
         }
 
-        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}Repository->update($input, $id);
+        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}Service->update(${{ $config->modelNames->camel }}, $input);
 
 @if($config->options->localized)
         return $this->sendResponse(
-            ${{ $config->modelNames->camel }}->toArray(),
+            new {{ $config->modelNames->name }}Resource(${{ $config->modelNames->camel }}),
             __('messages.updated', ['model' => __('models/{{ $config->modelNames->camelPlural }}.singular')])
         );
 @else
-        return $this->sendResponse(${{ $config->modelNames->camel }}->toArray(), '{{ $config->modelNames->name }} updated successfully');
+        return $this->sendResponse(new {{ $config->modelNames->name }}Resource(${{ $config->modelNames->camel }}), '{{ $config->modelNames->name }} updated successfully');
 @endif
     }
 
@@ -123,7 +123,7 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
         if (empty(${{ $config->modelNames->camel }})) {
 @if($config->options->localized)
             return $this->sendError(
-                __('messages.not_found', ['model' => __('models/$MODEL_NAME_PLURAL_CAMEL$.singular')])
+                __('messages.not_found', ['model' => __('models/{{ $config->modelNames->camelPlural }}.singular')])
             );
 @else
             return $this->sendError('{{ $config->modelNames->human }} not found');
@@ -133,7 +133,7 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
         ${{ $config->modelNames->camel }}->delete();
 
 @if($config->options->localized)
-        return $this->sendError(
+        return $this->sendResponse(
             $id,
             __('messages.deleted', ['model' => __('models/{{ $config->modelNames->camelPlural }}.singular')])
         );
