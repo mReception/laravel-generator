@@ -1,0 +1,1 @@
+ * @property \{{ $config->namespaces->model }}\{{ $relatedModel }} {{ $isArray }} {{ $functionName }}

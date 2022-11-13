@@ -50,6 +50,7 @@ class ModelGenerator extends BaseGenerator
             'customUpdatedAt'  => $this->customUpdatedAt(),
             'customSoftDelete' => $this->customSoftDelete(),
             'relations'        => $this->generateRelations(),
+            'relationsDocProperties'   => $this->generateRelationsDocProperties(),
             'timestamps'       => config('laravel_generator.timestamps.enabled', true),
         ];
     }
@@ -338,6 +339,20 @@ class ModelGenerator extends BaseGenerator
         }
 
         return implode(infy_nl_tab(2), $relations);
+    }
+
+    protected function generateRelationsDocProperties(): string
+    {
+        $relations = [];
+
+        if (isset($this->config->relations) && !empty($this->config->relations)) {
+            foreach ($this->config->relations as $relation) {
+                $relationPropertyText = $relation->getRelationFunctionText();
+                $relations[] = $relationPropertyText;
+            }
+        }
+
+        return implode(infy_nl_tab(1), $relations);
     }
 
     public function rollback()

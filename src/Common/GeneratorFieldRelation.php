@@ -75,6 +75,44 @@ class GeneratorFieldRelation
 
         return '';
     }
+    public function getRelationPropertyText(string $relationText = null): string
+    {
+        $singularRelation = (!empty($this->relationName)) ? $this->relationName : Str::camel($relationText);
+        $pluralRelation = (!empty($this->relationName)) ? $this->relationName : Str::camel(Str::plural($relationText));
+
+        switch ($this->type) {
+            case '1t1':
+                $functionName = $singularRelation;
+                $isArray = '';
+                break;
+            case 'mtm':
+            case 'hmt':
+            case '1tm':
+                $functionName = $pluralRelation;
+                $isArray = '[]';
+                break;
+            case 'mt1':
+                if (!empty($this->relationName)) {
+                    $singularRelation = $this->relationName;
+                } elseif (isset($this->inputs[1])) {
+                    $singularRelation = Str::camel(str_replace('_id', '', strtolower($this->inputs[1])));
+                }
+                $functionName = $singularRelation;
+                $isArray = '';
+                break;
+            default:
+                $functionName = '';
+                $isArray = '';
+                $relationClass = '';
+                break;
+        }
+
+        if (!empty($functionName) and !empty($isArray)) {
+            return $this->generateRelationProperty($functionName, $isArray);
+        }
+
+        return '';
+    }
 
     protected function generateRelation($functionName, $relation, $relationClass)
     {
@@ -88,12 +126,32 @@ class GeneratorFieldRelation
             $inputFields = '';
         }
 
+        $this->relationsArray = [
+            'relationClass' => $relationClass,
+            'functionName'  => $functionName,
+            'relation'      => $relation,
+            'relatedModel'  => $relatedModelName,
+            'fields'        => $inputFields,
+        ];
+
         return view('laravel-generator::model.relationship', [
             'relationClass' => $relationClass,
             'functionName'  => $functionName,
             'relation'      => $relation,
             'relatedModel'  => $relatedModelName,
             'fields'        => $inputFields,
+        ])->render();
+    }
+
+    protected function generateRelationProperty(string $functionName, string $isArray): string
+    {
+        $inputs = $this->inputs;
+        $relatedModelName = array_shift($inputs);
+
+        return view('laravel-generator::model.relationship_doc', [
+            'isArray'  => $isArray,
+            'functionName'  => $functionName,
+            'relatedModel'  => $relatedModelName,
         ])->render();
     }
 }
