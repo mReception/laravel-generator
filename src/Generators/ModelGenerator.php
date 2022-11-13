@@ -24,34 +24,34 @@ class ModelGenerator extends BaseGenerator
         parent::__construct();
 
         $this->path = $this->config->paths->model;
-        $this->fileName = $this->config->modelNames->name.'.php';
+        $this->fileName = $this->config->modelNames->name . '.php';
     }
 
     public function generate()
     {
         $templateData = view('laravel-generator::model.model', $this->variables())->render();
 
-        g_filesystem()->createFile($this->path.$this->fileName, $templateData);
+        g_filesystem()->createFile($this->path . $this->fileName, $templateData);
 
-        $this->config->commandComment(infy_nl().'Model created: ');
+        $this->config->commandComment(infy_nl() . 'Model created: ');
         $this->config->commandInfo($this->fileName);
     }
 
     public function variables(): array
     {
         return [
-            'fillables'        => implode(','.infy_nl_tab(1, 2), $this->generateFillables()),
-            'properties'       => $this->generateProperties(),
-            'casts'            => implode(','.infy_nl_tab(1, 2), $this->generateCasts()),
-            'rules'            => implode(','.infy_nl_tab(1, 2), $this->generateRules()),
-            'swaggerDocs'      => $this->fillDocs(),
+            'fillables' => implode(',' . infy_nl_tab(1, 2), $this->generateFillables()),
+            'properties' => $this->generateProperties(),
+            'casts' => implode(',' . infy_nl_tab(1, 2), $this->generateCasts()),
+            'rules' => implode(',' . infy_nl_tab(1, 2), $this->generateRules()),
+            'swaggerDocs' => $this->fillDocs(),
             'customPrimaryKey' => $this->customPrimaryKey(),
-            'customCreatedAt'  => $this->customCreatedAt(),
-            'customUpdatedAt'  => $this->customUpdatedAt(),
+            'customCreatedAt' => $this->customCreatedAt(),
+            'customUpdatedAt' => $this->customUpdatedAt(),
             'customSoftDelete' => $this->customSoftDelete(),
-            'relations'        => $this->generateRelations(),
-            'relationsDocProperties'   => $this->generateRelationsDocProperties(),
-            'timestamps'       => config('laravel_generator.timestamps.enabled', true),
+            'relations' => $this->generateRelations(),
+            'relationsDocProperties' => $this->generateRelationsDocProperties(),
+            'timestamps' => config('laravel_generator.timestamps.enabled', true),
         ];
     }
 
@@ -109,7 +109,7 @@ class ModelGenerator extends BaseGenerator
         if (isset($this->config->fields) && !empty($this->config->fields)) {
             foreach ($this->config->fields as $field) {
                 if ($field->isFillable) {
-                    $fillables[] = "'".$field->name."'";
+                    $fillables[] = "'" . $field->name . "'";
                 }
             }
         }
@@ -140,11 +140,11 @@ class ModelGenerator extends BaseGenerator
             )->render();
         }
 
-        $requiredFields = '{'.implode(',', $requiredFields).'}';
+        $requiredFields = '{' . implode(',', $requiredFields) . '}';
 
         return view('swagger-generator::model.model', [
             'requiredFields' => $requiredFields,
-            'properties'     => implode(','.infy_nl().' ', $properties),
+            'properties' => implode(',' . infy_nl() . ' ', $properties),
         ]);
     }
 
@@ -156,7 +156,7 @@ class ModelGenerator extends BaseGenerator
             foreach ($this->config->fields as $field) {
                 if (!empty($field->validations)) {
                     if (Str::contains($field->validations, 'required')) {
-                        $requiredFields[] = '"'.$field->name.'"';
+                        $requiredFields[] = '"' . $field->name . '"';
                     }
                 }
             }
@@ -168,7 +168,7 @@ class ModelGenerator extends BaseGenerator
     protected function generateRules(): array
     {
         $dont_require_fields = config('laravel_generator.options.hidden_fields', [])
-                + config('laravel_generator.options.excluded_fields', $this->excluded_fields);
+            + config('laravel_generator.options.excluded_fields', $this->excluded_fields);
 
         $rules = [];
 
@@ -177,7 +177,8 @@ class ModelGenerator extends BaseGenerator
                 if ($field->isNotNull && empty($field->validations)) {
                     $field->validations = 'required';
                 }
-
+                $dbType = strtolower($field->dbType);
+                $dbTypeValue = (str_contains($dbType, ',')) ? explode(',', $dbType)[0] : $dbType;
                 /**
                  * Generate some sane defaults based on the field type if we
                  * are generating from a database table.
@@ -189,8 +190,13 @@ class ModelGenerator extends BaseGenerator
                         $rule[] = 'nullable';
                     }
 
-                    switch ($field->dbType) {
+                    switch ($dbTypeValue) {
                         case 'integer':
+                        case 'increments':
+                        case 'smallint':
+                        case 'long':
+                        case 'bigint':
+                        case 'biginteger':
                             $rule[] = 'integer';
                             break;
                         case 'tinyint':
@@ -205,11 +211,15 @@ class ModelGenerator extends BaseGenerator
                         case 'varchar':
                         case 'string':
                             $rule[] = 'string';
+                            if($field->length) {
+                                $rule[] = 'max:' . $field->length;
+                            } else {
 
-                            // Enforce a maximum string length if possible.
-                            foreach (explode(':', $field->dbType) as $key => $value) {
-                                if (preg_match('/string,(\d+)/', $value, $matches)) {
-                                    $rule[] = 'max:'.$matches[1];
+                                // Enforce a maximum string length if possible.
+                                foreach (explode(':', $field->dbType) as $key => $value) {
+                                    if (preg_match('/string,(\d+)/', $value, $matches)) {
+                                        $rule[] = 'max:' . $matches[1];
+                                    }
                                 }
                             }
                             break;
@@ -231,7 +241,7 @@ class ModelGenerator extends BaseGenerator
                     });
                     $field->validations = implode('|', $rule);
                 }
-                $rule = "'".$field->name."' => '".$field->validations."'";
+                $rule = "'" . $field->name . "' => '" . $field->validations . "'";
                 $rules[] = $rule;
             }
         }
@@ -246,9 +256,9 @@ class ModelGenerator extends BaseGenerator
         foreach ($this->generateRules() as $rule) {
             if (Str::contains($rule, 'unique:')) {
                 $rule = explode('=>', $rule);
-                $string = '$rules['.trim($rule[0]).'].","';
+                $string = '$rules[' . trim($rule[0]) . '].","';
 
-                $uniqueRules .= '$rules['.trim($rule[0]).'] = '.$string.'.$this->route("'.$tableNameSingular.'");';
+                $uniqueRules .= '$rules[' . trim($rule[0]) . '] = ' . $string . '.$this->route("' . $tableNameSingular . '");';
             }
         }
 
@@ -266,13 +276,16 @@ class ModelGenerator extends BaseGenerator
                 continue;
             }
 
-            $rule = "'".$field->name."' => ";
-
-            switch (strtolower($field->dbType)) {
+            $rule = "'" . $field->name . "' => ";
+            $dbType = strtolower($field->dbType);
+            $dbTypeValue = (str_contains($dbType, ',')) ? explode(',', $dbType)[0] : $dbType;
+            switch ($dbTypeValue) {
                 case 'integer':
+                case 'bigInteger':
                 case 'increments':
-                case 'smallinteger':
+                case 'smallint':
                 case 'long':
+                case 'bigint':
                 case 'biginteger':
                     $rule .= "'integer'";
                     break;
@@ -314,7 +327,7 @@ class ModelGenerator extends BaseGenerator
         return $casts;
     }
 
-    protected function  generateRelations(): string
+    protected function generateRelations(): string
     {
         $relations = [];
 
@@ -326,7 +339,7 @@ class ModelGenerator extends BaseGenerator
 
                 $relationShipText = $field;
                 if (in_array($field, $fieldsArr)) {
-                    $relationShipText = $relationShipText.'_'.$count;
+                    $relationShipText = $relationShipText . '_' . $count;
                     $count++;
                 }
 
@@ -344,19 +357,10 @@ class ModelGenerator extends BaseGenerator
     protected function generateRelationsDocProperties(): string
     {
         $relations = [];
-        $count = 1;
-        $fieldsArr = [];
 
         if (isset($this->config->relations) && !empty($this->config->relations)) {
             foreach ($this->config->relations as $relation) {
-                $field = (isset($relation->inputs[0])) ? $relation->inputs[0] : null;
-
-                $relationShipText = $field;
-                if (in_array($field, $fieldsArr)) {
-                    $relationShipText = $relationShipText.'_'.$count;
-                    $count++;
-                }
-                $relationPropertyText = $relation->getRelationDocPropertyText($relationShipText);
+                $relationPropertyText = $relation->getRelationDocPropertyText();
                 $relations[] = $relationPropertyText;
             }
         }
@@ -367,7 +371,7 @@ class ModelGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->config->commandComment('Model file deleted: '.$this->fileName);
+            $this->config->commandComment('Model file deleted: ' . $this->fileName);
         }
     }
 
@@ -378,38 +382,42 @@ class ModelGenerator extends BaseGenerator
     protected function generateProperties()
     {
         $properties = [];
+        dd($this->config->fields);
         foreach ($this->config->fields as $field) {
-
-            switch (strtolower($field->dbType)) {
+            $dbType = strtolower($field->dbType);
+            $dbTypeValue = (str_contains($dbType, ',')) ? explode(',', $dbType)[0] : $dbType;
+            switch ($dbTypeValue) {
                 case 'integer':
-                case 'bigint unsigned':
+                case 'bigInteger':
                 case 'increments':
-                case 'unsigned':
                 case 'smallint':
                 case 'long':
                 case 'bigint':
-                    $type = "int";
+                case 'biginteger':
+                    $type = 'int';
                     break;
                 case 'double':
-                    $type = "double";
+                    $type = 'double';
                     break;
                 case 'decimal':
                     $type = sprintf("'decimal:%d'", $field->numberDecimalPoints);
                     break;
                 case 'float':
-                    $type = "float";
+                    $type = 'float';
                     break;
                 case 'boolean':
-                    $type = "boolean";
+                    $type = 'boolean';
                     break;
                 case 'datetime':
                 case 'datetimetz':
-                case 'text':
-                case 'char':
-                case 'string':
-                case 'enum':
                 case 'date':
-                    $type = "string";
+                    $type = 'string';
+                    break;
+                case 'enum':
+                case 'string':
+                case 'char':
+                case 'text':
+                    $type = 'string';
                     break;
                 default:
                     $type = '';
@@ -418,7 +426,7 @@ class ModelGenerator extends BaseGenerator
 
             $properties[$field->name] = [
                 'type' => $type,
-                'name' => $field->name
+                'name' => $field->name . '/*' . $field->dbType . '*/'
             ];
         }
 
