@@ -29,6 +29,7 @@ class GeneratorField
     public string $foreignKeyText = '';
 
     public int $numberDecimalPoints = 2;
+    public int $length;
 
     public function parseDBType(string $dbInput)
     {

@@ -19,7 +19,7 @@ class SchemaUtil
         if (count($fieldTypeParams) > 0) {
             $fieldStr .= ', '.implode(' ,', $fieldTypeParams);
         }
-        if ($fieldType == 'enum') {
+        if ($fieldType === 'enum') {
             $inputsArr = explode(',', $field['htmlTypeInputs']);
             $inputArrStr = GeneratorFieldsInputUtil::prepareValuesArrayStr($inputsArr);
             $fieldStr .= ', '.$inputArrStr;

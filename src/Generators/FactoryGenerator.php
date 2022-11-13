@@ -85,7 +85,11 @@ class FactoryGenerator extends BaseGenerator
                 $rule = $rules[$field->name];
             }
 
-            switch (strtolower($field->dbType)) {
+            $gender = array_rand(['male', 'female'],1);
+            $dbType = strtolower($field->dbType);
+            $dbTypeValue = (str_contains($dbType, ',')) ? explode(',', $dbType)[0] : $dbType;
+
+            switch ($dbTypeValue) {
                 case 'integer':
                 case 'unsignedinteger':
                 case 'smallinteger':
@@ -99,18 +103,34 @@ class FactoryGenerator extends BaseGenerator
                 case 'decimal':
                     $fakerData = $this->getValidNumber($rule);
                     break;
+
+                case 'float':
+                    $lower = strtolower($field->name);
+                    $firstChar = substr($lower, 0, 1);
+                    if (str_contains($lower, 'latitude')) {
+                        $fakerData = '14.5678';
+                    } elseif (str_contains($lower, 'longitude')) {
+                        $fakerData = '45.1314';
+                    }
+                    break;
                 case 'string':
                 case 'char':
                     $lower = strtolower($field->name);
                     $firstChar = substr($lower, 0, 1);
-                    if (str_contains($lower, 'email')) {
-                        $fakerData = 'email';
+                    if (str_contains($lower, 'username')) {
+                        $fakerData = 'userName';
+                    } elseif (str_contains($lower, 'name')) {
+                        $fakerData = 'name('.$gender.')';
+                    } elseif (str_contains($lower, 'address')) {
+                        $fakerData = 'address';
+                    } elseif (str_contains($lower, 'email')) {
+                        $fakerData = 'safeEmail';
                     } elseif ($firstChar == 'f' && str_contains($lower, 'name')) {
                         $fakerData = 'firstName';
                     } elseif (($firstChar == 's' || $firstChar == 'l') && str_contains($lower, 'name')) {
                         $fakerData = 'lastName';
                     } elseif (str_contains($lower, 'phone')) {
-                        $fakerData = "numerify('0##########')";
+                        $fakerData = "phoneNumber";
                     } elseif (str_contains($lower, 'password')) {
                         $fakerData = "lexify('1???@???A???')";
                     } elseif (strpos($lower, 'address')) {

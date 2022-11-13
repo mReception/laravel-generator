@@ -137,6 +137,9 @@ class TableFieldsGenerator
                 case 'text':
                     $field = $this->generateField($column, 'text', 'textarea');
                     break;
+                case 'varchar':
+                    $field = $this->generateVarcharField($column, 'string', 'text');
+                    break;
                 default:
                     $field = $this->generateField($column, 'string', 'text');
                     break;
@@ -227,7 +230,7 @@ class TableFieldsGenerator
      *
      * @return GeneratorField
      */
-    private function checkForPrimary(GeneratorField $field)
+    private function checkForPrimary(GeneratorField $field): GeneratorField
     {
         if ($field->name == $this->primaryKey) {
             $field->isPrimary = true;
@@ -254,6 +257,26 @@ class TableFieldsGenerator
     {
         $field = new GeneratorField();
         $field->name = $column->getName();
+        $field->parseDBType($dbType); //, $column); TODO: handle column param
+        $field->parseHtmlInput($htmlType);
+
+        return $this->checkForPrimary($field);
+    }
+
+    /**
+     * Generates field.
+     *
+     * @param Column $column
+     * @param string $dbType
+     * @param string $htmlType
+     *
+     * @return GeneratorField
+     */
+    private function generateVarcharField(Column $column, string $dbType, string $htmlType): GeneratorField
+    {
+        $field = new GeneratorField();
+        $field->name = $column->getName();
+        $field->length = $column->getLength();
         $field->parseDBType($dbType); //, $column); TODO: handle column param
         $field->parseHtmlInput($htmlType);
 
