@@ -8,7 +8,6 @@ use {{ $config->namespaces->apiRequest }}\Create{{ $config->modelNames->name }}A
 use {{ $config->namespaces->apiRequest }}\Update{{ $config->modelNames->name }}APIRequest;
 use {{ $config->namespaces->model }}\{{ $config->modelNames->name }};
 use {{ $config->namespaces->repository }}\{{ $config->modelNames->name }}Repository;
-use {{ $config->namespaces->service }}\{{ $config->modelNames->name }}Service;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use {{ $config->namespaces->app }}\Http\Controllers\AppBaseController;
@@ -17,10 +16,13 @@ use {{ $config->namespaces->apiResource }}\{{ $config->modelNames->name }}Resour
 {!! $docController !!}
 class {{ $config->modelNames->name }}APIController extends AppBaseController
 {
-    public function __construct(
-        private readonly {{ $config->modelNames->name }}Repository ${{ $config->modelNames->camel }}Repository,
-        private readonly {{ $config->modelNames->name }}Service ${{ $config->modelNames->camel }}Service
-    ) {}
+    /** @var  {{ $config->modelNames->name }}Repository */
+    private ${{ $config->modelNames->camel }}Repository;
+
+    public function __construct({{ $config->modelNames->name }}Repository ${{ $config->modelNames->camel }}Repo)
+    {
+        $this->{{ $config->modelNames->camel }}Repository = ${{ $config->modelNames->camel }}Repo;
+    }
 
     {!! $docIndex !!}
     public function index(Request $request): JsonResponse
@@ -46,8 +48,7 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
     {
         $input = $request->all();
 
-        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}Service->create($input);
-        $this->{{ $config->modelNames->camel }}Repository->save(${{ $config->modelNames->camel }});
+        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}Repository->create($input);
 
 @if($config->options->localized)
         return $this->sendResponse(
@@ -103,8 +104,7 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
 @endif
         }
 
-        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}Service->update(${{ $config->modelNames->camel }}, $input);
-        $this->{{ $config->modelNames->camel }}Repo->save(${{ $config->modelNames->camel }});
+        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}Repository->update($input, $id);
 
 @if($config->options->localized)
         return $this->sendResponse(

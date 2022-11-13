@@ -45,11 +45,11 @@ class {{ $config->modelNames->name }}ManageService extends BaseService
      * Remove the specified {{ $config->modelNames->name }} from storage.
      * @param int $id
      *
-     * @return void
+     * @return bool|mixed|null
      *
      * @throws \Exception
      */
-    public function delete($id): void
+    public function delete(int $id): bool|null
     {
         return parent::delete($id);
     }

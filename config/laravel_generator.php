@@ -154,7 +154,7 @@ return [
 
         'excluded_fields' => ['id'], // Array of columns that doesn't required while creating module
 
-        'service' => true,
+        'service_pattern' => true,
     ],
 
     /*

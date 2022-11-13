@@ -57,9 +57,9 @@ class BaseCommand extends Command
         $this->getFields();
     }
 
-    public function generateCommonItems()
+    public function generateCommonItems(): void
     {
-        if (!$this->option('fromTable') and !$this->isSkip('migration')) {
+        if (!$this->option('fromTable') && !$this->isSkip('migration')) {
             $migrationGenerator = app(MigrationGenerator::class);
             $migrationGenerator->generate();
         }
@@ -79,7 +79,7 @@ class BaseCommand extends Command
             $serviceGenerator->generate();
         }
 
-        if ($this->config->options->factory || (!$this->isSkip('tests') and $this->config->options->tests)) {
+        if ($this->config->options->factory || (!$this->isSkip('tests') && $this->config->options->tests)) {
             $factoryGenerator = app(FactoryGenerator::class);
             $factoryGenerator->generate();
         }

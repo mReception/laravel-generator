@@ -3,12 +3,15 @@
 namespace InfyOm\Generator\Common;
 
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Str;
 use InfyOm\Generator\DTOs\GeneratorNamespaces;
 use InfyOm\Generator\DTOs\GeneratorOptions;
 use InfyOm\Generator\DTOs\GeneratorPaths;
 use InfyOm\Generator\DTOs\GeneratorPrefixes;
 use InfyOm\Generator\DTOs\ModelNames;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class GeneratorConfig
 {
@@ -274,7 +277,7 @@ class GeneratorConfig
         $options->localized = config('laravel_generator.options.localized', false);
         $options->repositoryPattern = config('laravel_generator.options.repository_pattern', true);
         $options->resources = config('laravel_generator.options.resources', false);
-        $options->service = config('laravel_generator.options.service', true);
+        $options->servicePattern = config('laravel_generator.options.service_pattern', true);
         $options->factory = config('laravel_generator.options.factory', false);
         $options->seeder = config('laravel_generator.options.seeder', false);
         $options->swagger = config('laravel_generator.options.swagger', false);
@@ -334,5 +337,12 @@ class GeneratorConfig
     public function commandInfo($message)
     {
         $this->command->info($message);
+    }
+
+    public function getRelationArrayOrNot($relationClass):string {
+        return match ($relationClass) {
+            HasMany::class, MorphToMany::class, BelongsToMany::class => '[]',
+            default => '',
+        };
     }
 }

@@ -2,6 +2,7 @@
 
 namespace InfyOm\Generator\Generators;
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use InfyOm\Generator\Utils\TableFieldsGenerator;
 
@@ -40,7 +41,7 @@ class ModelGenerator extends BaseGenerator
     {
         return [
             'fillables'        => implode(','.infy_nl_tab(1, 2), $this->generateFillables()),
-            'properties'       => $this->generateFillables(),
+            'properties'       => $this->generateProperties(),
             'casts'            => implode(','.infy_nl_tab(1, 2), $this->generateCasts()),
             'rules'            => implode(','.infy_nl_tab(1, 2), $this->generateRules()),
             'swaggerDocs'      => $this->fillDocs(),
@@ -191,6 +192,7 @@ class ModelGenerator extends BaseGenerator
                         case 'integer':
                             $rule[] = 'integer';
                             break;
+                        case 'tinyint':
                         case 'boolean':
                             $rule[] = 'boolean';
                             break;
@@ -199,6 +201,7 @@ class ModelGenerator extends BaseGenerator
                         case 'decimal':
                             $rule[] = 'numeric';
                             break;
+                        case 'varchar':
                         case 'string':
                             $rule[] = 'string';
 
@@ -310,7 +313,7 @@ class ModelGenerator extends BaseGenerator
         return $casts;
     }
 
-    protected function generateRelations(): string
+    protected function  generateRelations(): string
     {
         $relations = [];
 
@@ -342,5 +345,59 @@ class ModelGenerator extends BaseGenerator
         if ($this->rollbackFile($this->path, $this->fileName)) {
             $this->config->commandComment('Model file deleted: '.$this->fileName);
         }
+    }
+
+    /**
+     * Generates the properties for the specified table.
+     * @return array the generated properties (property => type)
+     */
+    protected function generateProperties()
+    {
+        $properties = [];
+        foreach ($this->config->fields as $field) {
+
+            switch (strtolower($field->dbType)) {
+                case 'integer':
+                case 'increments':
+                case 'smallinteger':
+                case 'long':
+                case 'biginteger':
+                    $type = "int";
+                    break;
+                case 'double':
+                    $type = "double";
+                    break;
+                case 'decimal':
+                    $type = sprintf("'decimal:%d'", $field->numberDecimalPoints);
+                    break;
+                case 'float':
+                    $type = "float";
+                    break;
+                case 'boolean':
+                    $type = "boolean";
+                    break;
+                case 'datetime':
+                case 'datetimetz':
+                case 'date':
+                    $type = "string";
+                    break;
+                case 'enum':
+                case 'string':
+                case 'char':
+                case 'text':
+                    $type = "string";
+                    break;
+                default:
+                    $type = '';
+                    break;
+            }
+
+            $properties[$field->name] = [
+                'type' => $type,
+                'name' => $field->name
+            ];
+        }
+
+        return $properties;
     }
 }
