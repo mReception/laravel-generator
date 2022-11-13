@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 @foreach($properties as $name => $property)
  * @property {{ $property['type'] }} ${{ $name }}
 @endforeach
-{!! $relationsDocProperties !!}
+ {!! $relationsDocProperties !!}
 */
 class {{ $config->modelNames->name }} extends Model
 {

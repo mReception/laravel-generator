@@ -344,10 +344,19 @@ class ModelGenerator extends BaseGenerator
     protected function generateRelationsDocProperties(): string
     {
         $relations = [];
+        $count = 1;
+        $fieldsArr = [];
 
         if (isset($this->config->relations) && !empty($this->config->relations)) {
             foreach ($this->config->relations as $relation) {
-                $relationPropertyText = $relation->getRelationDocPropertyText();
+                $field = (isset($relation->inputs[0])) ? $relation->inputs[0] : null;
+
+                $relationShipText = $field;
+                if (in_array($field, $fieldsArr)) {
+                    $relationShipText = $relationShipText.'_'.$count;
+                    $count++;
+                }
+                $relationPropertyText = $relation->getRelationDocPropertyText($relationShipText);
                 $relations[] = $relationPropertyText;
             }
         }
@@ -375,6 +384,7 @@ class ModelGenerator extends BaseGenerator
                 case 'integer':
                 case 'bigint unsigned':
                 case 'increments':
+                case 'unsigned':
                 case 'smallint':
                 case 'long':
                 case 'bigint':
@@ -394,13 +404,11 @@ class ModelGenerator extends BaseGenerator
                     break;
                 case 'datetime':
                 case 'datetimetz':
-                case 'date':
-                    $type = "string";
-                    break;
-                case 'enum':
-                case 'string':
-                case 'char':
                 case 'text':
+                case 'char':
+                case 'string':
+                case 'enum':
+                case 'date':
                     $type = "string";
                     break;
                 default:
