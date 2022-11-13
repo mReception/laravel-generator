@@ -137,6 +137,7 @@ class TableFieldsGenerator
                 case 'text':
                     $field = $this->generateField($column, 'text', 'textarea');
                     break;
+                case 'string':
                 case 'varchar':
                     $field = $this->generateVarcharField($column, 'string', 'text');
                     break;
@@ -156,6 +157,7 @@ class TableFieldsGenerator
                 $field->inIndex = false;
                 $field->inView = false;
             }
+            $field->length = $column->getLength();
             $field->isNotNull = $column->getNotNull();
             $field->description = $column->getComment() ?? ''; // get comments from table
 
