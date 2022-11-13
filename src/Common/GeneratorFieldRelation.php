@@ -75,7 +75,8 @@ class GeneratorFieldRelation
 
         return '';
     }
-    public function getRelationPropertyText(string $relationText = null): string
+
+    public function getRelationDocPropertyText(string $relationText = null): string
     {
         $singularRelation = (!empty($this->relationName)) ? $this->relationName : Str::camel($relationText);
         $pluralRelation = (!empty($this->relationName)) ? $this->relationName : Str::camel(Str::plural($relationText));

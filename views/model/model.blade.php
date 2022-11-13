@@ -15,9 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 @foreach($properties as $name => $property)
  * @property {{ $property['type'] }} ${{ $name }}
 @endforeach
-@foreach($config->relations as $relation)
- * @property {{ $relation['relationClass'] }} {{ $config->getRelationArrayOrNot($relation['relationClass'])  }} ${{ $relation['functionName'] }}
-@endforeach
+{!! $relationsDocProperties !!}
 */
 class {{ $config->modelNames->name }} extends Model
 {

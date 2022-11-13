@@ -347,7 +347,7 @@ class ModelGenerator extends BaseGenerator
 
         if (isset($this->config->relations) && !empty($this->config->relations)) {
             foreach ($this->config->relations as $relation) {
-                $relationPropertyText = $relation->getRelationFunctionText();
+                $relationPropertyText = $relation->getRelationDocPropertyText();
                 $relations[] = $relationPropertyText;
             }
         }
@@ -373,6 +373,7 @@ class ModelGenerator extends BaseGenerator
 
             switch (strtolower($field->dbType)) {
                 case 'integer':
+                case 'biginteger unsigned':
                 case 'increments':
                 case 'smallinteger':
                 case 'long':
