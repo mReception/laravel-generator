@@ -382,7 +382,7 @@ class ModelGenerator extends BaseGenerator
     protected function generateProperties()
     {
         $properties = [];
-
+        
         foreach ($this->config->fields as $field) {
             $dbType = strtolower($field->dbType);
             $dbTypeValue = (str_contains($dbType, ',')) ? explode(',', $dbType)[0] : $dbType;

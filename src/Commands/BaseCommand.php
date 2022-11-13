@@ -52,7 +52,7 @@ class BaseCommand extends Command
     {
         $this->config = app(GeneratorConfig::class);
         $this->config->setCommand($this);
-
+        
         $this->config->init();
         $this->getFields();
     }
@@ -329,10 +329,10 @@ class BaseCommand extends Command
 
             return;
         }
-
+       
         if ($this->option('fromTable')) {
             $this->parseFieldsFromTable();
-
+           
             return;
         }
 
@@ -487,11 +487,11 @@ class BaseCommand extends Command
         } else {
             $ignoredFields = [];
         }
-
+       
         $tableFieldsGenerator = new TableFieldsGenerator($tableName, $ignoredFields, $this->config->connection);
         $tableFieldsGenerator->prepareFieldsFromTable();
         $tableFieldsGenerator->prepareRelations();
-
+        
         $this->config->fields = $tableFieldsGenerator->fields;
         $this->config->relations = $tableFieldsGenerator->relations;
     }

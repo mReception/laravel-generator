@@ -101,7 +101,7 @@ class TableFieldsGenerator
     {
         foreach ($this->columns as $column) {
             $type = $column->getType()->getName();
-
+            
             switch ($type) {
                 case 'integer':
                     $field = $this->generateIntFieldInput($column, 'integer');
@@ -137,12 +137,11 @@ class TableFieldsGenerator
                 case 'text':
                     $field = $this->generateField($column, 'text', 'textarea');
                     break;
-                case 'string':
                 case 'varchar':
                     $field = $this->generateVarcharField($column, 'string', 'text');
                     break;
                 default:
-                    $field = $this->generateField($column, 'string', 'text');
+                    $field = $this->generateVarcharField($column, 'string', 'text');
                     break;
             }
 
@@ -157,7 +156,6 @@ class TableFieldsGenerator
                 $field->inIndex = false;
                 $field->inView = false;
             }
-            $field->length = $column->getLength();
             $field->isNotNull = $column->getNotNull();
             $field->description = $column->getComment() ?? ''; // get comments from table
 
