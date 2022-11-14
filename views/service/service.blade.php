@@ -6,7 +6,6 @@ namespace {{ $config->namespaces->service }};
 
 use App\Services\BaseService;
 use {{ $config->namespaces->repository }}\{{ $config->modelNames->name }}Repository;
-use {{ $config->namespaces->repository }}\{{ $config->modelNames->name }}Repository;
 use {{ $config->namespaces->model }}\{{ $config->modelNames->name }};
 
 class {{ $config->modelNames->name }}ManageService extends BaseService
@@ -38,7 +37,7 @@ class {{ $config->modelNames->name }}ManageService extends BaseService
      */
     public function update(array $input, int $id): {{ $config->modelNames->name }}
     {
-        return= parent::update($input, $id);
+        return parent::update($input, $id);
     }
 
     /**

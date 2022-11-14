@@ -26,7 +26,6 @@ class {{ $config->modelNames->name }}Factory extends Factory
     {
         {!! $relations !!}
 
-        {!! $forAccounts !!}
         return [
             {!! $fields !!}
         ];
