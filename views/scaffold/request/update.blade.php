@@ -6,6 +6,7 @@ namespace {{ $config->namespaces->request }};
 
 use {{ $config->namespaces->model }}\{{ $config->modelNames->name }};
 use Illuminate\Foundation\Http\FormRequest;
+{!! $use !!}
 
 class Update{{ $config->modelNames->name }}Request extends FormRequest
 {

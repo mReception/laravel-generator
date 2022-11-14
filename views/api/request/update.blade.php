@@ -6,6 +6,7 @@ namespace {{ $config->namespaces->apiRequest }};
 
 use {{ $config->namespaces->model }}\{{ $config->modelNames->name }};
 use InfyOm\Generator\Request\APIRequest;
+{!! $use !!}
 
 class Update{{ $config->modelNames->name }}APIRequest extends APIRequest
 {

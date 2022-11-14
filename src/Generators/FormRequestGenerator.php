@@ -39,8 +39,10 @@ abstract class FormRequestGenerator extends BaseGenerator
 
     protected function generateCreateRequest(): void
     {
+        $enumRules = $this->modelGenerator->generateUniqueRules();
         $templateData = view($this->getViewCreateName(), [
-            'enumRules' => $this->modelGenerator->generateFormRequestRules()
+            'enumRules' => $enumRules,
+            'use' => !empty($enumRules)? "use Illuminate\Validation\Rule;":""
         ])->render();
 
         g_filesystem()->createFile($this->path.$this->createFileName, $templateData);
@@ -51,13 +53,14 @@ abstract class FormRequestGenerator extends BaseGenerator
 
     protected function generateUpdateRequest()
     {
-
         $rules = $this->modelGenerator->generateUniqueRules();
+        $enumRules = $this->modelGenerator->generateUniqueRules();
         $templateData = view(
             $this->getViewUpdateName(),
             [
-                'uniqueRules' => $this->modelGenerator->generateUniqueRules(),
-                'enumRules' => $this->modelGenerator->generateFormRequestRules()
+                'uniqueRules' => $rules,
+                'enumRules' => $enumRules,
+                'use' => !empty($enumRules)? "use Illuminate\Validation\Rule;":""
             ]
             )->render();
 

@@ -261,22 +261,17 @@ class ModelGenerator extends BaseGenerator
 
         foreach ($this->config->fields as $field) {
             if (!$field->isPrimary && !in_array($field->name, $dont_require_fields, true)) {
-                if ($field->isNotNull && empty($field->validations)) {
-                    $field->validations = 'required';
-                }
                 $dbType = strtolower($field->dbType);
                 $dbTypeValue = (str_contains($dbType, ',')) ? explode(',', $dbType)[0] : $dbType;
-                /**
-                 * Generate some sane defaults based on the field type if we
-                 * are generating from a database table.
-                 */
-                if ($this->config->getOption('fromTable') && $dbTypeValue === 'enum') {
+                if ($dbTypeValue === 'enum' && $this->config->getOption('fromTable')) {
 
-                    $rule[] = 'Rule::in(["' . implode('","', $field->htmlValues) . '"])';
+                    $enumRules .= '$rules["' . $field->name . '"] = ['. PHP_EOL;
 
-                    $enumRules .= '$rules[' . $field->name . '] = [';
+                    if ($field->isNotNull && empty($field->validations)) {
+                        $enumRules .= '\t"required",'. PHP_EOL;
+                    }
 
-                    $enumRules .= 'Rule::in(["' . implode('","', $field->htmlValues) . '"]),' . PHP_EOL;
+                    $enumRules .= '\tRule::in(["' . implode('","', $field->htmlValues) . '"]),' . PHP_EOL;
 
                     $enumRules .= '];' . PHP_EOL;
                 }
