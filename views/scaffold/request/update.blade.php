@@ -28,6 +28,7 @@ class Update{{ $config->modelNames->name }}Request extends FormRequest
     {
         $rules = {{ $config->modelNames->name }}::$rules;
         {!! $uniqueRules !!}
+        {!! $enumRules !!}
         return $rules;
     }
 }

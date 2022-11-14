@@ -275,12 +275,13 @@ class ModelGenerator extends BaseGenerator
 
                     $rule[] = 'Rule::in(["' . implode('","', $field->htmlValues) . '"])';
 
+
+                    $enumRules .= '$rules[' . $field->name . '] = [';
+                    foreach ($rule as $element) {
+                        $enumRules .= $element . "," . PHP_EOL;
+                    }
+                    $enumRules .= '];' . PHP_EOL;
                 }
-                $enumRules .= '$rules['.$field->name.'] = [';
-                foreach($rule as $element) {
-                    $enumRules .=  $element.",".PHP_EOL;
-                }
-                $enumRules .= '];'.PHP_EOL;
             }
         }
 

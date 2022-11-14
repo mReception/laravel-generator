@@ -26,6 +26,9 @@ class Create{{ $config->modelNames->name }}Request extends FormRequest
      */
     public function rules()
     {
-        return {{ $config->modelNames->name }}::$rules;
+        $rules = {{ $config->modelNames->name }}::$rules;
+        {!! $enumRules !!}
+
+        return $rules;
     }
 }

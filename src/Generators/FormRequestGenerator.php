@@ -39,7 +39,9 @@ abstract class FormRequestGenerator extends BaseGenerator
 
     protected function generateCreateRequest(): void
     {
-        $templateData = view($this->getViewCreateName(), $this->variables())->render();
+        $templateData = view($this->getViewCreateName(), [
+            'enumRules' => $this->modelGenerator->generateFormRequestRules()
+        ])->render();
 
         g_filesystem()->createFile($this->path.$this->createFileName, $templateData);
 
@@ -53,10 +55,10 @@ abstract class FormRequestGenerator extends BaseGenerator
         $rules = $this->modelGenerator->generateUniqueRules();
         $templateData = view(
             $this->getViewUpdateName(),
-            array_merge([
-                'uniqueRules' => $rules,
-                $this->variables()
-                    ])
+            [
+                'uniqueRules' => $this->modelGenerator->generateUniqueRules(),
+                'enumRules' => $this->modelGenerator->generateFormRequestRules()
+            ]
             )->render();
 
         g_filesystem()->createFile($this->path.$this->updateFileName, $templateData);
@@ -76,10 +78,4 @@ abstract class FormRequestGenerator extends BaseGenerator
         }
     }
 
-    public function variables(): array
-    {
-        return [
-            'enumRules' => $this->modelGenerator->generateFormRequestRules()
-        ];
-    }
 }
