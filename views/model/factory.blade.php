@@ -25,6 +25,8 @@ class {{ $config->modelNames->name }}Factory extends Factory
     public function definition()
     {
         {!! $relations !!}
+
+        {!! $forAccounts !!}
         return [
             {!! $fields !!}
         ];

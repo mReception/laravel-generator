@@ -269,7 +269,7 @@ class FactoryGenerator extends BaseGenerator
             $variable = Str::camel($relation);
             $model = Str::studly($relation);
             if (!empty($text)) {
-                $text = infy_nl_tab(1, 2);
+                $text .= infy_nl_tab(1, 2);
             }
             $text .= '$' . $variable . ' = ' . $model . '::first();' .
                 infy_nl_tab(1, 2) .

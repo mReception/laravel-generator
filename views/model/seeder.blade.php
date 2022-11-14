@@ -15,6 +15,6 @@ class {{ $config->modelNames->plural }}TableSeeder extends Seeder
      */
     public function run()
     {
-
+        {{ $config->modelNames->name }}::factory()->count(1)->create();
     }
 }

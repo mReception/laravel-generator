@@ -50,6 +50,7 @@ class ModelGenerator extends BaseGenerator
             'customUpdatedAt' => $this->customUpdatedAt(),
             'customSoftDelete' => $this->customSoftDelete(),
             'relations' => $this->generateRelations(),
+            'forAccounts' => $this->generateForAccounts(),
             'relationsDocProperties' => $this->generateRelationsDocProperties(),
             'timestamps' => config('laravel_generator.timestamps.enabled', true),
         ];
@@ -265,13 +266,13 @@ class ModelGenerator extends BaseGenerator
                 $dbTypeValue = (str_contains($dbType, ',')) ? explode(',', $dbType)[0] : $dbType;
                 if ($dbTypeValue === 'enum' && $this->config->getOption('fromTable')) {
 
-                    $enumRules .= '$rules["' . $field->name . '"] = ['. PHP_EOL;
+                    $enumRules .= '$rules["' . $field->name . '"] = [';
 
                     if ($field->isNotNull && empty($field->validations)) {
-                        $enumRules .= '\t"required",'. PHP_EOL;
+                        $enumRules .= '"required", ';
                     }
 
-                    $enumRules .= '\tRule::in(["' . implode('","', $field->htmlValues) . '"]),' . PHP_EOL;
+                    $enumRules .= 'Rule::in(["' . implode('","', $field->htmlValues) . '"]),';
 
                     $enumRules .= '];' . PHP_EOL;
                 }
@@ -463,5 +464,9 @@ class ModelGenerator extends BaseGenerator
         }
 
         return $properties;
+    }
+
+    protected function generateForAccounts() {
+
     }
 }
