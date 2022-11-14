@@ -47,7 +47,6 @@ class GeneratorConfig
         $this->loadNamespaces();
         $this->prepareTable();
         $this->prepareOptions();
-        $this->prepareRules();
     }
 
     public static function addDynamicVariable(string $name, $value)
@@ -348,20 +347,4 @@ class GeneratorConfig
         };
     }
 
-    private function prepareRules()
-    {
-        $rules = [];
-        foreach ($this->fields as $filed) {
-            if(!empty($field->requestValidators)) {
-//                $rules.=  "['".$field->name."' => ".$field->requestValidators]";
-            }
-        }
-        if (!empty($rules)){
-            $this->requestRules = "array_merge(".$this->modelNames->name."::$rules.";
-        } else {
-            $this->requestRules = $this->modelNames->name. "::$rules;";
-        }
-
-
-    }
 }

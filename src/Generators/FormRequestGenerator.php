@@ -5,7 +5,7 @@ namespace InfyOm\Generator\Generators;
 abstract class FormRequestGenerator extends BaseGenerator
 {
 
-    protected string $modelGenerator;
+    protected ModelGenerator $modelGenerator;
 
     protected string $createFileName;
 
