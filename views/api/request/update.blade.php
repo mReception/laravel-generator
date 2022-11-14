@@ -28,6 +28,7 @@ class Update{{ $config->modelNames->name }}APIRequest extends APIRequest
     {
         $rules = {{ $config->modelNames->name }}::$rules;
         {!! $uniqueRules !!}
+        {!! $enumRules !!}
         return $rules;
     }
 }

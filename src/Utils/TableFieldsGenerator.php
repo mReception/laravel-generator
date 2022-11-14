@@ -140,9 +140,6 @@ class TableFieldsGenerator
                 case 'text':
                     $field = $this->generateField($column, 'text', 'textarea');
                     break;
-                case 'varchar':
-                    $field = $this->generateVarcharField($column, 'string', 'text');
-                    break;
                 case 'enum':
                     $field = $this->generateEnumField($column, 'string', 'text');
                     break;
@@ -308,7 +305,7 @@ class TableFieldsGenerator
             return strlen($value);
         },$field->htmlValues));
         $field->htmlType = 'enum';
-        $field->parseDBTypeEnum($dbType, $field->htmlValues); //, $column); TODO: handle column param
+        $field->parseDBTypeEnum($dbType, $field->htmlValues);
         $field->parseHtmlInput($htmlType);
 
         return $this->checkForPrimary($field);

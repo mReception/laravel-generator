@@ -27,13 +27,8 @@ class Create{{ $config->modelNames->name }}APIRequest extends APIRequest
      */
     public function rules()
     {
-        return array_merge(
-            {{ $config->modelNames->name }}::$rules,
-            {{ array_map(function ($field) {
-                if(!empty($field->requestValidators)) {
-                    return [$field->name => $field->requestValidators];
-                }
-            }, $config->fields) }}
-        );
+        $rules = {{ $config->modelNames->name }}::$rules;
+        {!! $enumRules !!}
+        return $rules;
     }
 }

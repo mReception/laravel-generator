@@ -209,7 +209,7 @@ class ModelGenerator extends BaseGenerator
                             $rule[] = 'numeric';
                             break;
                         case 'enum':
-                            $field->requestValidators[]=[$field->name => '["string",Rule::in(["'.implode('","',$field->htmlValues).'"])]'];
+                            $field->requestValidator = 'Rule::in(["'.implode('","',$field->htmlValues).'"])';
                             $rule[] = 'string';
                             break;
                         case 'string':
@@ -231,6 +231,7 @@ class ModelGenerator extends BaseGenerator
                     }
 
                     $field->validations = implode('|', $rule);
+                    $field->requestValidator = $field->requestValidator ?? $field->validations;
                 }
             }
 
@@ -249,6 +250,41 @@ class ModelGenerator extends BaseGenerator
         }
 
         return $rules;
+    }
+
+    public function generateFormRequestRules(): string
+    {
+        $dont_require_fields = config('laravel_generator.options.hidden_fields', [])
+            + config('laravel_generator.options.excluded_fields', $this->excluded_fields);
+
+        $enumRules = '';
+
+        foreach ($this->config->fields as $field) {
+            if (!$field->isPrimary && !in_array($field->name, $dont_require_fields, true)) {
+                if ($field->isNotNull && empty($field->validations)) {
+                    $field->validations = 'required';
+                }
+                $dbType = strtolower($field->dbType);
+                $dbTypeValue = (str_contains($dbType, ',')) ? explode(',', $dbType)[0] : $dbType;
+                /**
+                 * Generate some sane defaults based on the field type if we
+                 * are generating from a database table.
+                 */
+                if ($this->config->getOption('fromTable') && $dbTypeValue === 'enum') {
+                    $rule = empty($field->validations) ? [] : explode('|', $field->validations);
+
+                    $rule[] = 'Rule::in(["' . implode('","', $field->htmlValues) . '"])';
+
+                }
+                $enumRules .= '$rules['.$field->name.'] = [';
+                foreach($rule as $element) {
+                    $enumRules .=  $element.",".PHP_EOL;
+                }
+                $enumRules .= '];'.PHP_EOL;
+            }
+        }
+
+        return $enumRules;
     }
 
     public function generateUniqueRules(): string

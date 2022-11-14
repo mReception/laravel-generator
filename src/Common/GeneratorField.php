@@ -31,7 +31,7 @@ class GeneratorField
 
     public int $numberDecimalPoints = 2;
     public int $length;
-    public array $requestValidators;
+    public string $requestValidator;
 
     public function parseDBType(string $dbInput)
     {
