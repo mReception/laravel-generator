@@ -271,15 +271,13 @@ class ModelGenerator extends BaseGenerator
                  * are generating from a database table.
                  */
                 if ($this->config->getOption('fromTable') && $dbTypeValue === 'enum') {
-                    $rule = empty($field->validations) ? [] : explode('|', $field->validations);
 
                     $rule[] = 'Rule::in(["' . implode('","', $field->htmlValues) . '"])';
 
-
                     $enumRules .= '$rules[' . $field->name . '] = [';
-                    foreach ($rule as $element) {
-                        $enumRules .= $element . "," . PHP_EOL;
-                    }
+
+                    $enumRules .= 'Rule::in(["' . implode('","', $field->htmlValues) . '"]),' . PHP_EOL;
+
                     $enumRules .= '];' . PHP_EOL;
                 }
             }
