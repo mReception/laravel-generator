@@ -186,7 +186,7 @@ class ModelGenerator extends BaseGenerator
                 if ($this->config->getOption('fromTable')) {
                     $rule = empty($field->validations) ? [] : explode('|', $field->validations);
 
-                    if (!$field->isNotNull) {
+                    if (!$field->isNotNull && !$field->isEnum) {
                         $rule[] = 'nullable';
                     }
 
@@ -208,13 +208,15 @@ class ModelGenerator extends BaseGenerator
                         case 'decimal':
                             $rule[] = 'numeric';
                             break;
-                        case 'varchar':
+                        case 'enum':
+                            $field->requestValidators[]=[$field->name => '["string",Rule::in(["'.implode('","',$field->htmlValues).'"])]'];
+                            $rule[] = 'string';
+                            break;
                         case 'string':
                             $rule[] = 'string';
-                            if($field->length) {
+                            if ($field->length) {
                                 $rule[] = 'max:' . $field->length;
                             } else {
-
                                 // Enforce a maximum string length if possible.
                                 foreach (explode(':', $field->dbType) as $key => $value) {
                                     if (preg_match('/string,(\d+)/', $value, $matches)) {
@@ -382,7 +384,7 @@ class ModelGenerator extends BaseGenerator
     protected function generateProperties()
     {
         $properties = [];
-        
+
         foreach ($this->config->fields as $field) {
             $dbType = strtolower($field->dbType);
             $dbTypeValue = (str_contains($dbType, ',')) ? explode(',', $dbType)[0] : $dbType;

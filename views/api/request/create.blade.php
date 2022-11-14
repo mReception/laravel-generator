@@ -1,5 +1,6 @@
 @php
     echo "<?php".PHP_EOL;
+    /** @var InfyOm\Generator\Common\GeneratorConfig $config */
 @endphp
 
 namespace {{ $config->namespaces->apiRequest }};
@@ -26,6 +27,13 @@ class Create{{ $config->modelNames->name }}APIRequest extends APIRequest
      */
     public function rules()
     {
-        return {{ $config->modelNames->name }}::$rules;
+        return array_merge(
+            {{ $config->modelNames->name }}::$rules,
+            {{ array_map(function ($field) {
+                if(!empty($field->requestValidators)) {
+                    return [$field->name => $field->requestValidators];
+                }
+            }, $config->fields) }}
+        );
     }
 }

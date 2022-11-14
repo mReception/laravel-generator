@@ -2,9 +2,9 @@
 
 namespace InfyOm\Generator\Utils;
 
-use DB;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Column;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use InfyOm\Generator\Common\GeneratorField;
 use InfyOm\Generator\Common\GeneratorFieldRelation;
@@ -58,6 +58,7 @@ class TableFieldsGenerator
 
     public function __construct($tableName, $ignoredFields, $connection = '')
     {
+
         $this->tableName = $tableName;
         $this->ignoredFields = $ignoredFields;
 
@@ -69,13 +70,14 @@ class TableFieldsGenerator
 
         $platform = $this->schemaManager->getDatabasePlatform();
         $defaultMappings = [
-            'enum' => 'string',
+            'enum' => 'enum',
             'json' => 'text',
             'bit'  => 'boolean',
         ];
 
         $mappings = config('laravel_generator.from_table.doctrine_mappings', []);
         $mappings = array_merge($mappings, $defaultMappings);
+
         foreach ($mappings as $dbType => $doctrineType) {
             $platform->registerDoctrineTypeMapping($dbType, $doctrineType);
         }
@@ -99,9 +101,10 @@ class TableFieldsGenerator
      */
     public function prepareFieldsFromTable()
     {
+
         foreach ($this->columns as $column) {
             $type = $column->getType()->getName();
-            
+
             switch ($type) {
                 case 'integer':
                     $field = $this->generateIntFieldInput($column, 'integer');
@@ -139,6 +142,9 @@ class TableFieldsGenerator
                     break;
                 case 'varchar':
                     $field = $this->generateVarcharField($column, 'string', 'text');
+                    break;
+                case 'enum':
+                    $field = $this->generateEnumField($column, 'string', 'text');
                     break;
                 default:
                     $field = $this->generateVarcharField($column, 'string', 'text');
@@ -278,6 +284,31 @@ class TableFieldsGenerator
         $field->name = $column->getName();
         $field->length = $column->getLength();
         $field->parseDBType($dbType); //, $column); TODO: handle column param
+        $field->parseHtmlInput($htmlType);
+
+        return $this->checkForPrimary($field);
+    }
+
+    /**
+     * Generates field.
+     *
+     * @param Column $column
+     * @param string $dbType
+     * @param string $htmlType
+     *
+     * @return GeneratorField
+     */
+    private function generateEnumField(Column $column, string $dbType, string $htmlType): GeneratorField
+    {
+
+        $field = new GeneratorField();
+        $field->name = $column->getName();
+        $field->htmlValues = $this->getEnumTableValues($this->tableName, $field->name);
+        $field->length = max(array_map(function($value){
+            return strlen($value);
+        },$field->htmlValues));
+        $field->htmlType = 'enum';
+        $field->parseDBTypeEnum($dbType, $field->htmlValues); //, $column); TODO: handle column param
         $field->parseHtmlInput($htmlType);
 
         return $this->checkForPrimary($field);
@@ -565,5 +596,15 @@ class TableFieldsGenerator
         }
 
         return $manyToOneRelations;
+    }
+
+    public static function getEnumTableValues(string $table, string $field): array {
+        $type = DB::select(DB::raw('SHOW COLUMNS FROM '.$table.' WHERE Field = "'.$field.'"'))[0]->Type;
+        preg_match('/^enum\((.*)\)$/', $type, $matches);
+        $values = array();
+        foreach(explode(',', $matches[1]) as $value){
+            $values[] = trim($value, "'");
+        }
+        return $values;
     }
 }

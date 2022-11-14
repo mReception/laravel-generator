@@ -16,7 +16,7 @@ class FactoryGenerator extends BaseGenerator
         parent::__construct();
 
         $this->path = $this->config->paths->factory;
-        $this->fileName = $this->config->modelNames->name.'Factory.php';
+        $this->fileName = $this->config->modelNames->name . 'Factory.php';
 
         //setup relations if available
         //assumes relation fields are tailed with _id if not supplied
@@ -27,13 +27,13 @@ class FactoryGenerator extends BaseGenerator
                     if (isset($r->inputs[1])) {
                         $field = $r->inputs[1];
                     } else {
-                        $field = Str::snake($relation).'_id';
+                        $field = Str::snake($relation) . '_id';
                     }
                     if ($field) {
                         $rel = $relation;
                         $this->relations[$field] = [
-                            'relation'      => $rel,
-                            'model_class'   => $this->config->namespaces->model.'\\'.$relation,
+                            'relation' => $rel,
+                            'model_class' => $this->config->namespaces->model . '\\' . $relation,
                         ];
                     }
                 }
@@ -46,8 +46,8 @@ class FactoryGenerator extends BaseGenerator
         $relations = $this->getRelationsBootstrap();
 
         return [
-            'fields'        => $this->generateFields(),
-            'relations'     => $relations['text'],
+            'fields' => $this->generateFields(),
+            'relations' => $relations['text'],
             'usedRelations' => $relations['uses'],
         ];
     }
@@ -56,9 +56,9 @@ class FactoryGenerator extends BaseGenerator
     {
         $templateData = view('laravel-generator::model.factory', $this->variables())->render();
 
-        g_filesystem()->createFile($this->path.$this->fileName, $templateData);
+        g_filesystem()->createFile($this->path . $this->fileName, $templateData);
 
-        $this->config->commandComment(infy_nl().'Factory created: ');
+        $this->config->commandComment(infy_nl() . 'Factory created: ');
         $this->config->commandInfo($this->fileName);
     }
 
@@ -67,7 +67,7 @@ class FactoryGenerator extends BaseGenerator
         $fields = [];
 
         //get model validation rules
-        $class = $this->config->namespaces->model.'\\'.$this->config->modelNames->name;
+        $class = $this->config->namespaces->model . '\\' . $this->config->modelNames->name;
         $rules = [];
         if (class_exists($class)) {
             $rules = $class::$rules;
@@ -79,13 +79,13 @@ class FactoryGenerator extends BaseGenerator
                 continue;
             }
 
-            $fieldData = "'".$field->name."' => ".'$this->faker->';
+            $fieldData = "'" . $field->name . "' => " . '$this->faker->';
             $rule = null;
             if (isset($rules[$field->name])) {
                 $rule = $rules[$field->name];
             }
 
-            $gender = array_rand(['male', 'female'],1);
+            $gender = array_rand(['male', 'female'], 1);
             $dbType = strtolower($field->dbType);
             $dbTypeValue = (str_contains($dbType, ',')) ? explode(',', $dbType)[0] : $dbType;
 
@@ -103,7 +103,11 @@ class FactoryGenerator extends BaseGenerator
                 case 'decimal':
                     $fakerData = $this->getValidNumber($rule);
                     break;
-
+                case 'enum':
+                    $fakerData = 'randomElement(' .
+                        GeneratorFieldsInputUtil::prepareValuesArrayStr($field->htmlValues) .
+                        ')';
+                    break;
                 case 'float':
                     $lower = strtolower($field->name);
                     $firstChar = substr($lower, 0, 1);
@@ -120,7 +124,7 @@ class FactoryGenerator extends BaseGenerator
                     if (str_contains($lower, 'username')) {
                         $fakerData = 'userName';
                     } elseif (str_contains($lower, 'name')) {
-                        $fakerData = 'name('.$gender.')';
+                        $fakerData = 'name(' . $gender . ')';
                     } elseif (str_contains($lower, 'address')) {
                         $fakerData = 'address';
                     } elseif (str_contains($lower, 'email')) {
@@ -130,7 +134,7 @@ class FactoryGenerator extends BaseGenerator
                     } elseif (($firstChar == 's' || $firstChar == 'l') && str_contains($lower, 'name')) {
                         $fakerData = 'lastName';
                     } elseif (str_contains($lower, 'phone')) {
-                        $fakerData = "phoneNumber";
+                        $fakerData = 'phoneNumber';
                     } elseif (str_contains($lower, 'password')) {
                         $fakerData = "lexify('1???@???A???')";
                     } elseif (strpos($lower, 'address')) {
@@ -158,11 +162,6 @@ class FactoryGenerator extends BaseGenerator
                 case 'time':
                     $fakerData = "date('H:i:s')";
                     break;
-                case 'enum':
-                    $fakerData = 'randomElement('.
-                        GeneratorFieldsInputUtil::prepareValuesArrayStr($field->htmlValues).
-                        ')';
-                    break;
                 default:
                     $fakerData = 'word';
             }
@@ -176,14 +175,14 @@ class FactoryGenerator extends BaseGenerator
             $fields[] = $fieldData;
         }
 
-        return implode(','.infy_nl_tab(1, 3), $fields);
+        return implode(',' . infy_nl_tab(1, 3), $fields);
     }
 
     /**
      * Generates a valid number based on applicable model rule.
      *
      * @param string $rule The applicable model rule
-     * @param int    $max  The maximum number to generate.
+     * @param int $max The maximum number to generate.
      *
      * @return string
      */
@@ -208,7 +207,7 @@ class FactoryGenerator extends BaseGenerator
         $relation = $this->relations[$fieldName]['relation'];
         $variable = Str::camel($relation);
 
-        return "'".$fieldName."' => ".'$'.$variable.'->id';
+        return "'" . $fieldName . "' => " . '$' . $variable . '->id';
     }
 
     /**
@@ -231,7 +230,7 @@ class FactoryGenerator extends BaseGenerator
                 $min = 5;
             }
 
-            return 'text('.'$this->faker->numberBetween('.$min.', '.$max.'))';
+            return 'text(' . '$this->faker->numberBetween(' . $min . ', ' . $max . '))';
         } else {
             return 'text';
         }
@@ -272,13 +271,13 @@ class FactoryGenerator extends BaseGenerator
             if (!empty($text)) {
                 $text = infy_nl_tab(1, 2);
             }
-            $text .= '$'.$variable.' = '.$model.'::first();'.
-            infy_nl_tab(1, 2).
-            'if (!$'.$variable.') {'.
-            infy_nl_tab(1, 3).
-            '$'.$variable.' = '.$model.'::factory()->create();'.
-            infy_nl_tab(1, 2).'}'.infy_nl();
-            $uses .= infy_nl()."use $qualifier;";
+            $text .= '$' . $variable . ' = ' . $model . '::first();' .
+                infy_nl_tab(1, 2) .
+                'if (!$' . $variable . ') {' .
+                infy_nl_tab(1, 3) .
+                '$' . $variable . ' = ' . $model . '::factory()->create();' .
+                infy_nl_tab(1, 2) . '}' . infy_nl();
+            $uses .= infy_nl() . "use $qualifier;";
         }
 
         return [
@@ -290,7 +289,7 @@ class FactoryGenerator extends BaseGenerator
     public function rollback()
     {
         if ($this->rollbackFile($this->path, $this->fileName)) {
-            $this->config->commandComment('Factory file deleted: '.$this->fileName);
+            $this->config->commandComment('Factory file deleted: ' . $this->fileName);
         }
     }
 }

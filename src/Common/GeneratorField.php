@@ -24,12 +24,14 @@ class GeneratorField
     public bool $inIndex = true;
     public bool $inView = true;
     public bool $isNotNull = false;
+    public bool $isEnum = false;
 
     public string $migrationText = '';
     public string $foreignKeyText = '';
 
     public int $numberDecimalPoints = 2;
     public int $length;
+    public array $requestValidators;
 
     public function parseDBType(string $dbInput)
     {
@@ -59,6 +61,16 @@ class GeneratorField
 //        }
 
         $this->prepareMigrationText();
+    }
+
+    public function parseDBTypeEnum(string $dbInput, $values)
+    {
+        $this->dbType = 'enum';
+        $this->isEnum = true;
+        $this->dbTypeParams = $values;
+
+        $this->migrationText = '$table->enum(["'.implode('","',$values).'"])';
+
     }
 
     public function parseHtmlInput(string $htmlInput)
