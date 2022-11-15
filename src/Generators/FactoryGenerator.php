@@ -186,7 +186,7 @@ class FactoryGenerator extends BaseGenerator
      *
      * @return string
      */
-    public function getValidNumber($rule = null, $max = PHP_INT_MAX): string
+    public function getValidNumber($rule = null, $max = 999999): string
     {
         if ($rule) {
             $max = $this->extractMinMax($rule, 'max') ?? $max;
