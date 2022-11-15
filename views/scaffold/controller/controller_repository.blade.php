@@ -11,14 +11,15 @@ use {{ $config->namespaces->request }}\Create{{ $config->modelNames->name }}Requ
 use {{ $config->namespaces->request }}\Update{{ $config->modelNames->name }}Request;
 use {{ $config->namespaces->app }}\Http\Controllers\AppBaseController;
 use {{ $config->namespaces->repository }}\{{ $config->modelNames->name }}Repository;
+use {{ $config->namespaces->service }}\{{ $config->modelNames->name }}ManageService;
 use Illuminate\Http\Request;
 use Flash;
 
 class {{ $config->modelNames->name }}Controller extends AppBaseController
 {
     public function __construct(
-        private readonly {{ $config->modelNames->name }}Repository ${{ $config->modelNames->camel }}Repo,
-        private readonly {{ $config->modelNames->name }}Service ${{ $config->modelNames->camel }}Service
+        private readonly {{ $config->modelNames->name }}Repository ${{ $config->modelNames->camel }}Repository,
+        private readonly {{ $config->modelNames->name }}Service ${{ $config->modelNames->camel }}ManageService
     ) {}
 
     /**

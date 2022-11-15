@@ -8,7 +8,7 @@ use {{ $config->namespaces->apiRequest }}\Create{{ $config->modelNames->name }}A
 use {{ $config->namespaces->apiRequest }}\Update{{ $config->modelNames->name }}APIRequest;
 use {{ $config->namespaces->model }}\{{ $config->modelNames->name }};
 use {{ $config->namespaces->repository }}\{{ $config->modelNames->name }}Repository;
-use {{ $config->namespaces->service }}\{{ $config->modelNames->name }}Service;
+use {{ $config->namespaces->service }}\{{ $config->modelNames->name }}ManageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use {{ $config->namespaces->app }}\Http\Controllers\AppBaseController;
@@ -18,7 +18,7 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
 {
     public function __construct(
         private readonly {{ $config->modelNames->name }}Repository ${{ $config->modelNames->camel }}Repository,
-        private readonly {{ $config->modelNames->name }}Service ${{ $config->modelNames->camel }}Service
+        private readonly {{ $config->modelNames->name }}Service ${{ $config->modelNames->camel }}ManageService
     ) {}
 
     {!! $docIndex !!}

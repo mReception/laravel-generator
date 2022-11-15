@@ -85,7 +85,7 @@ class FactoryGenerator extends BaseGenerator
                 $rule = $rules[$field->name];
             }
 
-            $gender = array_rand(['male', 'female'], 1);
+
             $dbType = strtolower($field->dbType);
             $dbTypeValue = (str_contains($dbType, ',')) ? explode(',', $dbType)[0] : $dbType;
 

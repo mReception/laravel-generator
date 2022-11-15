@@ -19,9 +19,9 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
     /** @var  {{ $config->modelNames->name }}Repository */
     private ${{ $config->modelNames->camel }}Repository;
 
-    public function __construct({{ $config->modelNames->name }}Repository ${{ $config->modelNames->camel }}Repo)
+    public function __construct({{ $config->modelNames->name }}Repository ${{ $config->modelNames->camel }}Repository)
     {
-        $this->{{ $config->modelNames->camel }}Repository = ${{ $config->modelNames->camel }}Repo;
+        $this->{{ $config->modelNames->camel }}Repository = ${{ $config->modelNames->camel }}Repository;
     }
 
     {!! $docIndex !!}
