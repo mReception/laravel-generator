@@ -95,7 +95,7 @@ class FactoryGenerator extends BaseGenerator
                 case 'smallinteger':
                 case 'biginteger':
                 case 'unsignedbiginteger':
-                    $fakerData = in_array($field->name, $relations) ? ':relation' : $this->getValidNumber($rule, 999);
+                    $fakerData = in_array($field->name, $relations) ? ':relation' : $this->getValidNumber($rule, 2147483647);
                     break;
                 case 'long':
                 case 'double':
@@ -124,7 +124,7 @@ class FactoryGenerator extends BaseGenerator
                     if (str_contains($lower, 'username')) {
                         $fakerData = 'userName';
                     } elseif (str_contains($lower, 'name')) {
-                        $fakerData = 'name(' . $gender . ')';
+                        $fakerData = 'lexify()';
                     } elseif (str_contains($lower, 'address')) {
                         $fakerData = 'address';
                     } elseif (str_contains($lower, 'email')) {
