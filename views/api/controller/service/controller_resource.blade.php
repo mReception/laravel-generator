@@ -19,7 +19,7 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
 {
     public function __construct(
         private readonly {{ $config->modelNames->name }}Repository ${{ $config->modelNames->camel }}Repository,
-        private readonly {{ $config->modelNames->name }}Service ${{ $config->modelNames->camel }}ManageService
+        private readonly {{ $config->modelNames->name }}ManageService ${{ $config->modelNames->camel }}ManageService
     ) {}
 
     {!! $docIndex !!}
@@ -46,7 +46,7 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
     {
         $input = $request->all();
 
-        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}Service->create($input);
+        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}ManageService->create($input);
 
 @if($config->options->localized)
         return $this->sendResponse(
@@ -102,7 +102,7 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
 @endif
         }
 
-        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}Service->update(${{ $config->modelNames->camel }}, $input);
+        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}ManageService->update(${{ $config->modelNames->camel }}, $input);
 
 @if($config->options->localized)
         return $this->sendResponse(

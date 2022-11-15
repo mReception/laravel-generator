@@ -24,9 +24,11 @@ class APIControllerGenerator extends BaseGenerator
 
     public function getViewName(): string
     {
-        if ($this->config->options->repositoryPattern) {
+        if ($this->config->options->servicePattern) {
+            $templateName = 'service.controller';
+        } elseif($this->config->options->repositoryPattern) {
             $templateName = 'repository.controller';
-        } else {
+        } else  {
             $templateName = 'model.controller';
         }
 

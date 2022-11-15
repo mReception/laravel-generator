@@ -18,7 +18,7 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
 {
     public function __construct(
         private readonly {{ $config->modelNames->name }}Repository ${{ $config->modelNames->camel }}Repository,
-        private readonly {{ $config->modelNames->name }}Service ${{ $config->modelNames->camel }}ManageService
+        private readonly {{ $config->modelNames->name }}ManageService ${{ $config->modelNames->camel }}ManageService
     ) {}
 
     {!! $docIndex !!}
