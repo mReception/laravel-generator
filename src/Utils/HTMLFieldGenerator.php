@@ -16,6 +16,15 @@ class HTMLFieldGenerator
             $variables['options'] = ', '.implode(', ', $validations);
         }
 
+        if ($field->selectable) {
+            $viewName = 'select';
+            $keyValues = GeneratorFieldsInputUtil::prepareKeyValueArrFromLabelValueStr($field->htmlValues);
+
+            $variables = [
+                'selectValues' => GeneratorFieldsInputUtil::prepareKeyValueArrayStr($keyValues),
+            ];
+        }
+
         switch ($field->htmlType) {
             case 'select':
             case 'enum':

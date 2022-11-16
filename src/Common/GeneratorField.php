@@ -8,6 +8,8 @@ class GeneratorField
 {
     /** @var string */
     public string $name;
+    public string $label;
+    public string $relatedModelName;
     public string $dbType;
     public array $dbTypeParams = [];
     public array $dbExtraFunctions = [];
@@ -244,11 +246,37 @@ class GeneratorField
         return Str::title(str_replace('_', ' ', $this->name));
     }
 
+    public function getLabel(): string {
+        if(str_ends_with( $this->name, '_id')){
+            $shortStr = str_replace('_id', '', $this->name);
+            $shortStr = Str::title(str_replace('_', ' ', $shortStr));
+            return str_replace(' ', '', $shortStr);
+        }
+        return Str::title(str_replace('_', ' ', $this->name));
+    }
+
+    public function getJsName(): string {
+        if(str_ends_with( $this->name, '_id')){
+            return Str::camel(str_replace('_id', '', $this->name));
+
+        }
+        return Str::camel($this->name);
+    }
+
+    public function getFileModelName(): string {
+        if(str_ends_with( $this->name, '_id')){
+            return Str::cebab(str_replace('_id', '', $this->name));
+
+        }
+        return '';
+    }
+
     public function variables(): array
     {
         return [
             'fieldName'  => $this->name,
             'fieldTitle' => $this->getTitle(),
+            'fieldLabel' => $this->getLabel(),
         ];
     }
 }

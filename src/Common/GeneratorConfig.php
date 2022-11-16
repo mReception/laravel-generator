@@ -191,6 +191,11 @@ class GeneratorConfig
 
         $paths->service = config('laravel_generator.path.service', app_path('Services/')).$namespacePrefix;
 
+        $paths->vueModel = config('laravel_generator.path.vue', app_path('Vue/models')).$namespacePrefix;
+        $paths->vueComponent = config('laravel_generator.path.service', app_path('Vue/components')).$namespacePrefix;
+        $paths->vueStore = config('laravel_generator.path.service', app_path('Vue/store/modules')).$namespacePrefix;
+        $paths->vueService = config('laravel_generator.path.service', app_path('Vue/services')).$namespacePrefix;
+
         $this->paths = $paths;
     }
 

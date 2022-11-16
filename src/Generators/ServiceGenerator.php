@@ -17,7 +17,7 @@ class ServiceGenerator extends BaseGenerator
         parent::__construct();
 
         $this->path = $this->config->paths->service;
-        $this->fileName = $this->config->modelNames->name.'Service.php';
+        $this->fileName = $this->config->modelNames->name.'ManageService.php';
     }
 
     public function generate()

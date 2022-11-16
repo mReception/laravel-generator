@@ -25,4 +25,9 @@ class GeneratorPaths
     public string $views;
 
     public string $service;
+
+    public string $vueModel;
+    public string $vueComponent;
+    public string $vueService;
+    public string $vueStore;
 }

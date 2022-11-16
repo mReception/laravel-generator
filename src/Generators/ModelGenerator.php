@@ -37,6 +37,18 @@ class ModelGenerator extends BaseGenerator
         $this->config->commandInfo($this->fileName);
     }
 
+    public function generateVueModel()
+    {
+        $templateData = view('laravel-generator::vue.model', $this->variables())->render();
+
+        $fileName = $this->config->paths->vueModel . $this->config->modelNames->dashed . '.ts';
+
+        g_filesystem()->createFile($fileName, $templateData);
+
+        $this->config->commandComment(infy_nl() . 'Vue Model created: ');
+        $this->config->commandInfo($fileName);
+    }
+
     public function variables(): array
     {
         return [
@@ -415,8 +427,10 @@ class ModelGenerator extends BaseGenerator
     protected function generateProperties()
     {
         $properties = [];
+        $jsType = 'string';
 
         foreach ($this->config->fields as $field) {
+            $jsName = $field->name;
             $dbType = strtolower($field->dbType);
             $dbTypeValue = (str_contains($dbType, ',')) ? explode(',', $dbType)[0] : $dbType;
             switch ($dbTypeValue) {
@@ -428,18 +442,23 @@ class ModelGenerator extends BaseGenerator
                 case 'bigint':
                 case 'biginteger':
                     $type = 'int';
+                    $jsType = 'number';
                     break;
                 case 'double':
                     $type = 'double';
+                    $jsType = 'number';
                     break;
                 case 'decimal':
                     $type = sprintf("'decimal:%d'", $field->numberDecimalPoints);
+                    $jsType = 'number';
                     break;
                 case 'float':
                     $type = 'float';
+                    $jsType = 'number';
                     break;
                 case 'boolean':
                     $type = 'boolean';
+                    $jsType = 'boolean';
                     break;
                 case 'datetime':
                 case 'datetimetz':
@@ -457,8 +476,18 @@ class ModelGenerator extends BaseGenerator
                     break;
             }
 
+            if (str_ends_with($field->name, "_id")) {
+                $jsType = $field->getLabel();
+                $jsName = $field->getJsName();
+                $jsFileModelName = $field->getFileModelName();
+                $jsImport = 'import {'.$jsType.'} from "@/models/'.$jsFileModelName;
+            }
+
             $properties[$field->name] = [
                 'type' => $type,
+                'js_type' => $jsType,
+                'js_name' => $jsName,
+                'js_import' => $jsImport ?? '',
                 'name' => $field->name . '/*' . $field->dbType . '*/'
             ];
         }
