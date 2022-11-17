@@ -1,11 +1,8 @@
-@php
-    echo "<?php".PHP_EOL;
-@endphp
-
 @foreach($properties as $name => $property)
-    {{ $property['js_import'] }};
+    * @property {{ $property['type'] }} ${{ $name }}
 @endforeach
-
+{!! $relationsDocProperties !!}
+*/
 export default interface {{ $config->modelNames->name }} {
 
 @foreach($properties as $name => $property)

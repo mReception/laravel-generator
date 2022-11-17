@@ -480,7 +480,7 @@ class ModelGenerator extends BaseGenerator
                 $jsType = $field->getLabel();
                 $jsName = $field->getJsName();
                 $jsFileModelName = $field->getFileModelName();
-                $jsImport = 'import {'.$jsType.'} from "@/models/'.$jsFileModelName;
+                $jsImport = 'import { '.$jsType.' } from \'@/models/'.$jsFileModelName.'\'';
             }
 
             $properties[$field->name] = [

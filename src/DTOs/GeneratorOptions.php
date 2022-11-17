@@ -14,5 +14,8 @@ class GeneratorOptions
     public bool $swagger;
     public bool $tests;
     public array $excludedFields;
-    public string $servicePattern;
+
+    public bool $servicePattern;
+
+    public bool $vue;
 }

@@ -28,7 +28,6 @@ class ModelGeneratorCommand extends BaseCommand
         /** @var ModelGenerator $modelGenerator */
         $modelGenerator = app(ModelGenerator::class);
         $modelGenerator->generate();
-        $modelGenerator->generateVueModel();
 
         $this->performPostActions();
     }

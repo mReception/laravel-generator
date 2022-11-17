@@ -34,6 +34,7 @@ class GeneratorField
     public int $numberDecimalPoints = 2;
     public int $length;
     public string $requestValidator;
+    public bool $selectable = false;
 
     public function parseDBType(string $dbInput)
     {
@@ -265,7 +266,7 @@ class GeneratorField
 
     public function getFileModelName(): string {
         if(str_ends_with( $this->name, '_id')){
-            return Str::cebab(str_replace('_id', '', $this->name));
+            return str_replace('_','-',str_replace('_id', '', $this->name));
 
         }
         return '';
