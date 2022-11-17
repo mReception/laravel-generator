@@ -91,7 +91,6 @@ class VueGenerator extends BaseGenerator
             'customUpdatedAt' => $this->customUpdatedAt(),
             'customSoftDelete' => $this->customSoftDelete(),
             'relations' => $this->generateRelations(),
-            'forAccounts' => $this->generateForAccounts(),
             'relationsDocProperties' => $this->generateRelationsDocProperties(),
             'timestamps' => config('laravel_generator.timestamps.enabled', true),
         ];

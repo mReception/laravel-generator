@@ -191,7 +191,7 @@ class GeneratorConfig
 
         $paths->service = config('laravel_generator.path.service', app_path('Services/')).$namespacePrefix;
 
-        $paths->vue = config('laravel_generator.path.vue', app_path('../frontend/'));
+        $paths->vue = config('laravel_generator.path.vue.vue', app_path('../frontend/'));
 
         $paths->vueModel = config('laravel_generator.path.vue.models', app_path('../frontend/src/models/'));
 
@@ -294,6 +294,7 @@ class GeneratorConfig
         $options->swagger = config('laravel_generator.options.swagger', false);
         $options->tests = config('laravel_generator.options.tests', false);
         $options->excludedFields = config('laravel_generator.options.excluded_fields', ['id']);
+        $options->vue = config('laravel_generator.options.vue', false);
 
         $this->options = $options;
     }
