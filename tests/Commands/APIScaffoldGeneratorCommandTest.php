@@ -1,6 +1,6 @@
 <?php
 
-use InfyOm\Generator\Commands\APIScaffoldGeneratorCommand;
+use InfyOm\Generator\Commands\VueGeneratorCommand;
 use InfyOm\Generator\Facades\FileUtils;
 use InfyOm\Generator\Generators\API\APIControllerGenerator;
 use InfyOm\Generator\Generators\API\APIRequestGenerator;
@@ -54,7 +54,7 @@ it('generates all files for api_scaffold from console', function () {
 
     config()->set('laravel_generator.options.seeder', true);
 
-    artisan(APIScaffoldGeneratorCommand::class, ['model' => 'Post'])
+    artisan(VueGeneratorCommand::class, ['model' => 'Post'])
         ->expectsQuestion('Field: (name db_type html_type options)', 'title body text')
         ->expectsQuestion('Enter validations: ', 'required')
         ->expectsQuestion('Field: (name db_type html_type options)', 'exit')
@@ -104,7 +104,7 @@ it('generates all files for api_scaffold from fields file', function () {
     $fileUtils->shouldReceive('getFile')
         ->andReturn('');
 
-    artisan(APIScaffoldGeneratorCommand::class, ['model' => 'Post', '--fieldsFile' => $modelSchemaFile])
+    artisan(VueGeneratorCommand::class, ['model' => 'Post', '--fieldsFile' => $modelSchemaFile])
         ->expectsQuestion(PHP_EOL.'Do you want to migrate database? [y|N]', false)
         ->assertSuccessful();
 });

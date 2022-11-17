@@ -26,6 +26,7 @@ class GeneratorPaths
 
     public string $service;
 
+    public string $vue;
     public string $vueModel;
     public string $vueComponent;
     public string $vueService;

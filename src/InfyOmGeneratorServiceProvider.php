@@ -9,7 +9,7 @@ use InfyOm\Generator\Commands\API\APIControllerGeneratorCommand;
 use InfyOm\Generator\Commands\API\APIGeneratorCommand;
 use InfyOm\Generator\Commands\API\APIRequestsGeneratorCommand;
 use InfyOm\Generator\Commands\API\TestsGeneratorCommand;
-use InfyOm\Generator\Commands\APIScaffoldGeneratorCommand;
+use InfyOm\Generator\Commands\VueGeneratorCommand;
 use InfyOm\Generator\Commands\Common\MigrationGeneratorCommand;
 use InfyOm\Generator\Commands\Common\ModelGeneratorCommand;
 use InfyOm\Generator\Commands\Common\RepositoryGeneratorCommand;
@@ -90,7 +90,7 @@ class InfyOmGeneratorServiceProvider extends ServiceProvider
         }
 
         $this->commands([
-            APIScaffoldGeneratorCommand::class,
+            VueGeneratorCommand::class,
 
             APIGeneratorCommand::class,
             APIControllerGeneratorCommand::class,
