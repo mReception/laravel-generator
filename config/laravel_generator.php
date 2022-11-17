@@ -1,5 +1,7 @@
 <?php
 
+use App\Core\Types\EnumType;
+
 return [
 
     /*
@@ -56,6 +58,14 @@ return [
         'menu_file'         => resource_path('views/layouts/menu.blade.php'),
 
         'service'           => app_path('Services/'),
+
+        'vue'               => [
+                                'vue' => app_path('/../frontend/src/'),
+                                'models' => app_path('/../frontend/src/models/'),
+                                'components' => app_path('/../frontend/src/components/'),
+                                'store' => app_path('/../frontend/src/store/modules/'),
+                                'services' => app_path('/../frontend/src/services/'),
+        ]
     ],
 
     /*
@@ -142,7 +152,7 @@ return [
 
         'repository_pattern' => true,
 
-        'resources' => false,
+        'resources' => true,
 
         'factory' => true,
 
@@ -155,6 +165,8 @@ return [
         'excluded_fields' => ['id'], // Array of columns that doesn't required while creating module
 
         'service_pattern' => true,
+
+        'vue' => true,
     ],
 
     /*
@@ -182,7 +194,8 @@ return [
     |
     */
 
-    'tables' => 'blade',
+//    'tables' => 'blade',
+    'tables' => 'datatables',
 
     /*
     |--------------------------------------------------------------------------
@@ -211,7 +224,11 @@ return [
 
     'from_table' => [
 
-        'doctrine_mappings' => [],
+        'doctrine_mappings' => [
+            'enum' => \App\Core\Types\EnumType::class,
+            'json' => 'text',
+            'bit'  => 'boolean',
+        ],
     ],
 
 ];

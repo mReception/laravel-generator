@@ -18,6 +18,7 @@ use InfyOm\Generator\Generators\API\APIResourceGenerator;
 use InfyOm\Generator\Generators\API\APIRoutesGenerator;
 use InfyOm\Generator\Generators\API\APITestGenerator;
 use InfyOm\Generator\Generators\FactoryGenerator;
+use InfyOm\Generator\Generators\Frontend\Vue\VueGenerator;
 use InfyOm\Generator\Generators\MigrationGenerator;
 use InfyOm\Generator\Generators\ModelGenerator;
 use InfyOm\Generator\Generators\RepositoryGenerator;
@@ -90,11 +91,11 @@ class BaseCommand extends Command
         }
 
         if ($this->config->options->vue) {
-            $modelGenerator = app(ModelGenerator::class);
+            $modelGenerator = app(VueGenerator::class);
             $modelGenerator->generateVueModel();
 //            $modelGenerator->generateVueComponent();
 //            $modelGenerator->generateVueStore();
-//            $modelGenerator->generateVueService();
+            $modelGenerator->generateVueService();
 
         }
     }
