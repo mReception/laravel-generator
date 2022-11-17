@@ -95,7 +95,7 @@ class BaseCommand extends Command
             $modelGenerator->generateVueModel();
 //            $modelGenerator->generateVueComponent();
 //            $modelGenerator->generateVueStore();
-            $modelGenerator->generateVueService();
+            $modelGenerator->generateVueAxiosService();
 
         }
     }

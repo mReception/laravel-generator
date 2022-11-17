@@ -60,11 +60,11 @@ return [
         'service'           => app_path('Services/'),
 
         'vue'               => [
-                                'vue' => app_path('/../frontend/src/'),
-                                'models' => app_path('/../frontend/src/models/'),
+                                'vue' => app_path('../frontend/src/'),
+                                'models' => app_path('../frontend/src/models/'),
                                 'components' => app_path('/../frontend/src/components/'),
-                                'store' => app_path('/../frontend/src/store/modules/'),
-                                'services' => app_path('/../frontend/src/services/'),
+                                'store' => app_path('../frontend/src/store/modules/'),
+                                'services' => app_path('../frontend/src/services/'),
         ]
     ],
 
