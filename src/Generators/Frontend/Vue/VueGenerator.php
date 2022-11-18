@@ -33,8 +33,8 @@ class VueGenerator extends BaseGenerator
         $this->path = $this->config->paths->vue;
         $this->componentFileName = $this->path . 'src/components/' . $this->config->modelNames->name . '.ts';
         $this->modelFileName = $this->path . 'src/models/' .$this->config->modelNames->dashed . '.ts';
-        $this->storeFileName = $this->path . 'src/store/modules' .$this->config->modelNames->dashed . '.ts';
-        $this->serviceFileName = $this->path . 'src/models/services' .$this->config->modelNames->dashed . '.service.ts';
+        $this->storeFileName = $this->path . 'src/store/modules/' .$this->config->modelNames->dashed . '.ts';
+        $this->serviceFileName = $this->path . 'src/services/' .$this->config->modelNames->dashed . '.service.ts';
     }
 
     public function generateVueModel()
