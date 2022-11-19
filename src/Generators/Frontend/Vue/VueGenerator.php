@@ -2,7 +2,7 @@
 
 namespace InfyOm\Generator\Generators\Frontend\Vue;
 
-use Illuminate\Support\Facades\Schema;
+
 use Illuminate\Support\Str;
 use InfyOm\Generator\Generators\BaseGenerator;
 use InfyOm\Generator\Generators\SwaggerGenerator;
