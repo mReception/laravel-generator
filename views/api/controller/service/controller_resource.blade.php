@@ -102,7 +102,7 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
 @endif
         }
 
-        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}ManageService->update(${{ $config->modelNames->camel }}, $input);
+        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}ManageService->update($id, $input);
 
 @if($config->options->localized)
         return $this->sendResponse(
