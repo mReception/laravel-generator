@@ -35,7 +35,7 @@ class VueGeneratorCommand extends BaseCommand
             $modelGenerator = app(VueGenerator::class);
             $modelGenerator->generateVueModel();
 //            $modelGenerator->generateVueComponent();
-//            $modelGenerator->generateVueStore();
+            $modelGenerator->generateVueStore();
             $modelGenerator->generateVueAxiosService();
 
         }

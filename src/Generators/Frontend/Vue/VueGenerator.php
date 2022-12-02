@@ -458,6 +458,8 @@ class VueGenerator extends BaseGenerator
         $jsType = 'string';
 
         foreach ($this->config->fields as $field) {
+            $jsImport = null;
+            $jsType = 'string';
             $jsName = $field->name;
             $dbType = strtolower($field->dbType);
             $dbTypeValue = (str_contains($dbType, ',')) ? explode(',', $dbType)[0] : $dbType;
@@ -488,19 +490,25 @@ class VueGenerator extends BaseGenerator
                     $type = 'boolean';
                     $jsType = 'boolean';
                     break;
+                case 'timestamp':
                 case 'datetime':
                 case 'datetimetz':
                 case 'date':
                     $type = 'string';
+                    $jsType = 'Date';
                     break;
                 case 'enum':
                 case 'string':
+                case 'varchar':
+                case 'email':
                 case 'char':
                 case 'text':
                     $type = 'string';
+                    $jsType = 'string';
                     break;
                 default:
                     $type = '';
+                    $jsType = 'string';
                     break;
             }
 
@@ -508,7 +516,7 @@ class VueGenerator extends BaseGenerator
                 $jsType = $field->getLabel();
                 $jsName = $field->getJsName();
                 $jsFileModelName = $field->getFileModelName();
-                $jsImport = 'import { ' . $jsType . ' } from \'@/models/' . $jsFileModelName . '\'';
+                $jsImport = 'import { ' . $jsType . ' } from \'src/models/' . $jsFileModelName . '\'';
             }
 
             $properties[$field->name] = [
