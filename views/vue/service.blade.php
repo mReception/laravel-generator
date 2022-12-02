@@ -1,5 +1,5 @@
 import httpClient from "src/services/http.service";
-import {{ $config->modelNames->name }} from "src/models/{{ $config->modelNames->dashed }}";
+import {{ $config->modelNames->name }} from 'src/models/{{ $config->modelNames->dashed }}';
 
 const resourceRoute  = 'api/{{ $config->prefixes->getRoutePrefixWith('/') }}{{ $config->modelNames->dashedPlural }}'
 
@@ -13,7 +13,7 @@ const {{ Str::camel($config->modelNames->plural) }}Service = {
         return httpClient.post(resourceRoute, {{ $config->modelNames->snake }})
     },
 
-    async update(form: []], id: number) {
+    async update(form: [], id: number) {
         return httpClient.put(resourceRoute+'/' + id, form)
     },
 
