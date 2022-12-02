@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import {{ $config->modelNames->camelPlural }}Service from 'src/services/{{ $config->modelNames->camel }}.service';
 import {{ $config->modelNames->name }} from 'src/models/{{ $config->modelNames->dashedPlural }}';
 
-import {{ $config->modelNames->camel }}Service from 'src/services/{{ $config->modelNames->camel }}.service';
+import {{ $config->modelNames->camelPlural }}Service from 'src/services/{{ $config->modelNames->camel }}.service';
 
 
 interface State {
@@ -44,7 +44,7 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
 
     async get(id: number) {
       try {
-          const {data} = await {{ $config->modelNames->camel }}Service.get(id);
+          const {data} = await {{ $config->modelNames->camelPlural }}Service.get(id);
         if (data.success) {
             if (this.{{ $config->modelNames->camelPlural }}.filter({{ $config->modelNames->camel }} => {{ $config->modelNames->camel }}.id === data.data.id).length === 0 ) {
                 this.{{ $config->modelNames->camelPlural }}.push(data.data)
@@ -56,7 +56,7 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
     },
     async create({{ $config->modelNames->camel }}: {{ $config->modelNames->name }}) {
       try {
-          const {data} = await {{ $config->modelNames->camel }}Service.create({{ $config->modelNames->camel }});
+          const {data} = await {{ $config->modelNames->camelPlural }}Service.create({{ $config->modelNames->camel }});
         if (data.success) {
             this.{{ $config->modelNames->camelPlural }}.push(data.data)
         }
@@ -66,7 +66,7 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
     },
     async update(form: [], id: number) {
       try {
-          const {data} = await {{ $config->modelNames->camel }}Service.update(form, id);
+          const {data} = await {{ $config->modelNames->camelPlural }}Service.update(form, id);
         if (data.success) {
             this.{{ $config->modelNames->camelPlural }}.push(data.data)
         }
@@ -75,7 +75,7 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
       }
     },
     async delete(id: number) {
-      const {data} = await {{ $config->modelNames->camel }}Service.delete(id);
+      const {data} = await {{ $config->modelNames->camelPlural }}Service.delete(id);
       if (data.success) {
           const index = this.findIndexById(id);
           if (index === -1) return;
