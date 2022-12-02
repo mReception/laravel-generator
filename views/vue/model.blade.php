@@ -1,5 +1,5 @@
 @foreach($properties as $name => $property)
-    {!! $property['js_import'] !!}
+{!! $property['js_import'] !!}
 @endforeach
 
 export default interface {{ $config->modelNames->name }} {
