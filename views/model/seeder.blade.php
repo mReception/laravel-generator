@@ -4,6 +4,7 @@
 
 namespace {{ $config->namespaces->seeder }};
 
+use App\Models\{{ $config->modelNames->name }};
 use Illuminate\Database\Seeder;
 
 class {{ $config->modelNames->plural }}TableSeeder extends Seeder

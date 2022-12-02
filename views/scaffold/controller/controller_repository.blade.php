@@ -42,8 +42,8 @@ class {{ $config->modelNames->name }}Controller extends AppBaseController
     {
         $input = $request->all();
 
-        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}Service->create($input);
-        $this->{{ $config->modelNames->camel }}Repo->save(${{ $config->modelNames->camel }});
+        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}ManageService->create($input);
+        $this->{{ $config->modelNames->camel }}Repository->save(${{ $config->modelNames->camel }});
 
         @include('laravel-generator::scaffold.controller.messages.save_success')
 
@@ -83,8 +83,8 @@ class {{ $config->modelNames->name }}Controller extends AppBaseController
 
         @include('laravel-generator::scaffold.controller.messages.not_found')
 
-        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}Service->update($request->all(), $id);
-        $this->{{ $config->modelNames->camel }}Repo->save(${{ $config->modelNames->camel }});
+        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}ManageService->update($request->all(), $id);
+        $this->{{ $config->modelNames->camel }}Repository->save(${{ $config->modelNames->camel }});
 
         @include('laravel-generator::scaffold.controller.messages.update_success')
 

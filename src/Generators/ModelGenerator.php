@@ -464,15 +464,18 @@ class ModelGenerator extends BaseGenerator
                 case 'datetimetz':
                 case 'date':
                     $type = 'string';
+                    $jsType = 'Date';
                     break;
                 case 'enum':
                 case 'string':
                 case 'char':
                 case 'text':
                     $type = 'string';
+                    $jsType = 'string';
                     break;
                 default:
                     $type = '';
+                    $jsType = 'string';
                     break;
             }
 
@@ -480,7 +483,7 @@ class ModelGenerator extends BaseGenerator
                 $jsType = $field->getLabel();
                 $jsName = $field->getJsName();
                 $jsFileModelName = $field->getFileModelName();
-                $jsImport = 'import { '.$jsType.' } from \'@/models/'.$jsFileModelName.'\'';
+                $jsImport = 'import { '.$jsType.' } from \'src/models/'.$jsFileModelName.'\'';
             }
 
             $properties[$field->name] = [
