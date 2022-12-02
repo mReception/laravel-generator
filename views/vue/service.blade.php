@@ -1,5 +1,5 @@
-import httpClient from "./http.service";
-import {{ $config->modelNames->name }} from "@/models/{{ $config->modelNames->dashed }}";
+import httpClient from "src/services/http.service";
+import {{ $config->modelNames->name }} from "src/models/{{ $config->modelNames->dashed }}";
 
 const resourceRoute  = 'api/{{ $config->prefixes->getRoutePrefixWith('/') }}{{ $config->modelNames->dashedPlural }}'
 
