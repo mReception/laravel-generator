@@ -58,7 +58,7 @@ class VueGenerator extends BaseGenerator
         $this->config->commandInfo($this->componentFileName);
     }
 
-    public function generateVueStoreModule()
+    public function generateVueStore()
     {
         $templateData = view('laravel-generator::vue.store', $this->variables())->render();
 
