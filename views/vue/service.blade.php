@@ -6,7 +6,7 @@ const resourceRoute  = 'api/{{ $config->prefixes->getRoutePrefixWith('/') }}{{ $
 const {{ Str::camel($config->modelNames->plural) }}Service = {
 
     async getAll(data: []) {
-        return httpClient.get(resourceRoute, JSON.stringify(data))
+        return httpClient.get(resourceRoute, { params: JSON.stringify(data) })
     },
 
     async create({{ $config->modelNames->snake }}: {{ $config->modelNames->name }}) {
