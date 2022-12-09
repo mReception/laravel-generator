@@ -15,6 +15,7 @@ class VueGenerator extends BaseGenerator
     private string $modelFileName;
     private string $storeFileName;
     private string $serviceFileName;
+    private string $requestFileName;
     /**
      * Fields not included in the generator by default.
      */
@@ -35,6 +36,7 @@ class VueGenerator extends BaseGenerator
         $this->modelFileName = $this->path . 'src/models/' .$this->config->modelNames->dashed . '.ts';
         $this->storeFileName = $this->path . 'src/store/modules/' .$this->config->modelNames->dashed . '.ts';
         $this->serviceFileName = $this->path . 'src/services/' .$this->config->modelNames->dashed . '.service.ts';
+        $this->requestFileName = $this->path . 'src/models/requets/' .$this->config->modelNames->name . 'FormRequest.ts';
     }
 
     public function generateVueModel()
@@ -66,6 +68,16 @@ class VueGenerator extends BaseGenerator
 
         $this->config->commandComment(infy_nl() . 'Store Vue created: ');
         $this->config->commandInfo($this->storeFileName);
+    }
+
+    public function generateFormRequest()
+    {
+        $templateData = view('laravel-generator::vue.request', $this->variables())->render();
+
+        g_filesystem()->createFile($this->requestFileName, $templateData);
+
+        $this->config->commandComment(infy_nl() . 'FormRequest Vue created: ');
+        $this->config->commandInfo($this->requestFileName);
     }
 
     public function generateVueAxiosService()

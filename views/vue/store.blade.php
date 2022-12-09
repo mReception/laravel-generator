@@ -2,8 +2,7 @@
 import { defineStore } from 'pinia';
 import {{ $config->modelNames->camelPlural }}Service from 'src/services/{{ $config->modelNames->camel }}.service';
 import {{ $config->modelNames->name }} from 'src/models/{{ $config->modelNames->dashedPlural }}';
-
-import {{ $config->modelNames->camelPlural }}Service from 'src/services/{{ $config->modelNames->camel }}.service';
+import {{ $config->modelNames->name }}RequestForm from 'src/models/requests/{{ $config->modelNames->dashedPlural }}';
 
 
 interface State {
@@ -27,7 +26,7 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
   },
 
   actions: {
-    async fetchAll(form: []) {
+    async fetchAll(form: {{ $config->modelNames->name }}RequestForm) {
       try {
           const { data } = await {{ $config->modelNames->camelPlural }}Service.getAll(form);
         debugger
@@ -68,7 +67,12 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
       try {
           const {data} = await {{ $config->modelNames->camelPlural }}Service.update(form, id);
         if (data.success) {
-            this.{{ $config->modelNames->camelPlural }}.push(data.data)
+            if (let index = this.findIndexById(id) >0) {
+                this.{{ $config->modelNames->camel }}[index] = data.data
+            }
+            else{
+                this.{{ $config->modelNames->camelPlural }}.push(data.data)
+            }
         }
       } catch (_) {
           console.log(_)
