@@ -468,6 +468,7 @@ class VueGenerator extends BaseGenerator
     {
         $properties = [];
         $jsType = 'string';
+        $jsFormType = null;
 
         foreach ($this->config->fields as $field) {
             $jsImport = null;
@@ -525,6 +526,7 @@ class VueGenerator extends BaseGenerator
             }
 
             if (str_ends_with($field->name, '_id')) {
+                $jsFormType = $jsType;
                 $jsType = $field->getLabel();
                 $jsName = $field->getJsName();
                 $jsFileModelName = $field->getFileModelName();
@@ -534,10 +536,12 @@ class VueGenerator extends BaseGenerator
             $properties[$field->name] = [
                 'type' => $type,
                 'js_type' => $jsType,
+                'js_form_type' => $jsFormType ?? $jsType,
                 'js_name' => $jsName,
                 'js_import' => $jsImport ?? '',
                 'name' => $field->name . '/*' . $field->dbType . '*/'
             ];
+
         }
 
         return $properties;
