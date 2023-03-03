@@ -34,7 +34,7 @@ class VueGeneratorCommand extends BaseCommand
         if ($this->config->options->vue) {
             $modelGenerator = app(VueGenerator::class);
             $modelGenerator->generateVueModel();
-//            $modelGenerator->generateVueComponent();
+            $modelGenerator->generateVueComponent();
             $modelGenerator->generateVueStore();
             $modelGenerator->generateFormRequest();
             $modelGenerator->generateVueAxiosService();
