@@ -56,11 +56,14 @@ class TableFieldsGenerator
     /** @var array */
     public $ignoredFields;
 
+    public $connection;
+
     public function __construct($tableName, $ignoredFields, $connection = '')
     {
 
         $this->tableName = $tableName;
         $this->ignoredFields = $ignoredFields;
+        $this->connection = $connection;
 
         if (!empty($connection)) {
             $this->schemaManager = DB::connection($connection)->getDoctrineSchemaManager();
@@ -300,7 +303,7 @@ class TableFieldsGenerator
 
         $field = new GeneratorField();
         $field->name = $column->getName();
-        $field->htmlValues = $this->getEnumTableValues($this->tableName, $field->name);
+        $field->htmlValues = $this->getEnumTableValues($this->tableName, $field->name, $this->connection);
         $field->length = max(array_map(function($value){
             return strlen($value);
         },$field->htmlValues));
@@ -595,8 +598,12 @@ class TableFieldsGenerator
         return $manyToOneRelations;
     }
 
-    public static function getEnumTableValues(string $table, string $field): array {
-        $type = DB::select(DB::raw('SHOW COLUMNS FROM '.$table.' WHERE Field = "'.$field.'"'))[0]->Type;
+    public static function getEnumTableValues(string $table, string $field, string $connection=''): array {
+        if(empty($connection)) {
+            $type = DB::select(DB::raw('SHOW COLUMNS FROM ' . $table . ' WHERE Field = "' . $field . '"'))[0]->Type;
+        } else {
+            $type = DB::connection($connection)->select(DB::raw('SHOW COLUMNS FROM ' . $table . ' WHERE Field = "' . $field . '"'))[0]->Type;
+        }
         preg_match('/^enum\((.*)\)$/', $type, $matches);
         $values = array();
         foreach(explode(',', $matches[1]) as $value){
