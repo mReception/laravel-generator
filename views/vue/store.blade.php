@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia';
 import {{ $config->modelNames->camelPlural }}Service from 'src/services/{{ $config->modelNames->camel }}.service';
 import {{ $config->modelNames->name }} from 'src/models/{{ $config->modelNames->dashedPlural }}';
-import {{ $config->modelNames->name }}RequestForm from 'src/models/requests/{{ $config->modelNames->dashedPlural }}';
+import {{ $config->modelNames->name }}RequestForm from 'src/models/requests/{{ $config->modelNames->name }}RequestForm';
 import OptionsSelect from "src/models/common/options-select";
 import {PaginationForm} from "src/models/requests/PaginationForm";
+import Pagination from "src/models/common/pagination";
 interface State {
     {{ $config->modelNames->camelPlural }}: {{ $config->modelNames->name }}[],
-    current{{ $config->modelNames->camel }}: {{ $config->modelNames->name }}|null,
+    current{{ $config->modelNames->name }}: {{ $config->modelNames->name }}|null,
     {{ $config->modelNames->camelPlural }}Options: OptionsSelect[],
     pagination: Pagination | null,
     errors: { message: string, errors: [] },
@@ -17,7 +18,7 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
   state: (): State => {
     return {
         {{ $config->modelNames->camelPlural }}: [],
-        current{{ $config->modelNames->camel }}: null,
+        current{{ $config->modelNames->name }}: null,
         {{ $config->modelNames->camelPlural }}Options: [],
         pagination: null,
         errors: {message: '', errors: []}
@@ -33,9 +34,9 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
     },
     getOptions(state) {
         return state.{{ $config->modelNames->camelPlural }}Options;
-    }
+    },
     getCurrentItem(state) {
-        return state.current{{ $config->modelNames->camel }};
+        return state.current{{ $config->modelNames->name }};
     }
 
   },
@@ -144,10 +145,10 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
         this.errors = {message: '', errors: []}
     },
     setCurrentByIndex(index: number) {
-          this.current{{ $config->modelNames->camel }} = this.t{{ $config->modelNames->camelPlural }}[index]
+          this.current{{ $config->modelNames->name }} = this.t{{ $config->modelNames->camelPlural }}[index]
     },
     clearCurrent() {
-          this.current{{ $config->modelNames->camel }} = null
+          this.current{{ $config->modelNames->name }} = null
     },
 
   }
