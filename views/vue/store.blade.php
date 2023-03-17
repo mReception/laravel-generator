@@ -1,13 +1,15 @@
-
 import { defineStore } from 'pinia';
 import {{ $config->modelNames->camelPlural }}Service from 'src/services/{{ $config->modelNames->camel }}.service';
 import {{ $config->modelNames->name }} from 'src/models/{{ $config->modelNames->dashedPlural }}';
 import {{ $config->modelNames->name }}RequestForm from 'src/models/requests/{{ $config->modelNames->dashedPlural }}';
-
-
+import OptionsSelect from "src/models/common/options-select";
+import {PaginationForm} from "src/models/requests/PaginationForm";
 interface State {
     {{ $config->modelNames->camelPlural }}: {{ $config->modelNames->name }}[],
-    {{ $config->modelNames->camel }}: {{ $config->modelNames->name }}|null
+    current{{ $config->modelNames->camel }}: {{ $config->modelNames->name }}|null,
+    {{ $config->modelNames->camelPlural }}Options: OptionsSelect[],
+    pagination: Pagination | null,
+    errors: { message: string, errors: [] },
 }
 
 
@@ -15,14 +17,27 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
   state: (): State => {
     return {
         {{ $config->modelNames->camelPlural }}: [],
-        {{ $config->modelNames->camel }}: null,
+        current{{ $config->modelNames->camel }}: null,
+        {{ $config->modelNames->camelPlural }}Options: [],
+        pagination: null,
+        errors: {message: '', errors: []}
     }
   },
 
   getters: {
-    {{ $config->modelNames->camelPlural }}List (state) {
+    list (state) {
       return state.{{ $config->modelNames->camelPlural }};
+    },
+    getErrors(state) {
+        return state.errors;
+    },
+    getOptions(state) {
+        return state.{{ $config->modelNames->camelPlural }}Options;
     }
+    getCurrentItem(state) {
+        return state.current{{ $config->modelNames->camel }};
+    }
+
   },
 
   actions: {
@@ -37,10 +52,30 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
           console.log(_)
       }
     },
-    set{{ $config->modelNames->name }} ({{ $config->modelNames->camel }}: {{ $config->modelNames->name }}) {
-    this.{{ $config->modelNames->camel }} = {{ $config->modelNames->camel }}
+        set{{ $config->modelNames->name }} ({{ $config->modelNames->camel }}: {{ $config->modelNames->name }}) {
+        this.{{ $config->modelNames->camel }} = {{ $config->modelNames->camel }}
     },
-
+    async  fetchOptions(fetchIfNotEmpty = false)
+      {
+          if (fetchIfNotEmpty && this.getOptions.length !== 0) {
+              return
+          }
+          try {
+              const paginationForm = new PaginationForm(null, null, null, 'name', false, ['id', 'name'])
+              const {data} = await {{ $config->modelNames->camel }}Service.getOptions({status: ['active', 10]}, paginationForm)
+              if (data.success) {
+                  this.{{ $config->modelNames->camelPlural }}Options = []
+                  data.data.forEach((element: {{ $config->modelNames->name }} ) => this.{{ $config->modelNames->camelPlural }} Options.push({
+                      id: element.id,
+                      name: element.name,
+                      field: '{{ $config->modelNames->camel }}_id',
+                      value: (element.id).toString()
+                  }))
+              }
+          } catch (_) {
+              console.error(_)
+          }
+      },
     async get(id: number) {
       try {
           const {data} = await {{ $config->modelNames->camelPlural }}Service.get(id);
@@ -54,29 +89,42 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
       }
     },
     async create({{ $config->modelNames->camel }}: {{ $config->modelNames->name }}) {
-      try {
-          const {data} = await {{ $config->modelNames->camelPlural }}Service.create({{ $config->modelNames->camel }});
-        if (data.success) {
-            this.{{ $config->modelNames->camelPlural }}.push(data.data)
-        }
-      } catch (_) {
-          console.log(_)
-      }
-    },
-    async update(form: [], id: number) {
-      try {
-          const {data} = await {{ $config->modelNames->camelPlural }}Service.update(form, id);
-        if (data.success) {
-            if (let index = this.findIndexById(id) >0) {
-                this.{{ $config->modelNames->camel }}[index] = data.data
-            }
-            else{
+
+        try {
+            const {data} = await {{ $config->modelNames->camelPlural }}Service.create({{ $config->modelNames->camel }});
+            if (data.success) {
                 this.{{ $config->modelNames->camelPlural }}.push(data.data)
             }
+        } catch (error: any) {
+            console.error(error)
+            if(error.response.status===422) {
+                this.setErrors (error.response.data.errors)
+            }
+            if(error.response.status===500) {
+                this.setErrors(error.response.data.errors)
+            }
         }
-      } catch (_) {
-          console.log(_)
-      }
+        finally {
+            this.clearErrors()
+        }
+    },
+    async update(form: [], id: number) {
+        try {
+             const {data} = await {{ $config->modelNames->camelPlural }}Service.update(form, id);
+             if (data.success) {
+                this.{{ $config->modelNames->camel }}.push(data.data)
+             }
+        } catch (error: any) {
+             console.error(error)
+             if(error.response.status===422) {
+             this.setErrors (error.response.data.errors)
+        }
+        if(error.response.status===500) {
+            this.setErrors(error.response.data.errors)
+        }
+        } finally {
+            this.clearErrors()
+        }
     },
     async delete(id: number) {
       const {data} = await {{ $config->modelNames->camelPlural }}Service.delete(id);
@@ -92,6 +140,16 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
     findIndexByName(name: string) {
       return this.{{ $config->modelNames->camelPlural }}.findIndex((item: {{ $config->modelNames->name }}) => item.name === name);
     },
+    clearErrors() {
+        this.errors = {message: '', errors: []}
+    },
+    setCurrentByIndex(index: number) {
+          this.current{{ $config->modelNames->camel }} = this.t{{ $config->modelNames->camelPlural }}[index]
+    },
+    clearCurrent() {
+          this.current{{ $config->modelNames->camel }} = null
+    },
+
   }
 });
 

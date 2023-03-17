@@ -12,6 +12,8 @@ class VueGenerator extends BaseGenerator
 {
 
     private string $componentFileName;
+    private string $componentTableName;
+    private string $componentDbFieldName;
     private string $modelFileName;
     private string $storeFileName;
     private string $serviceFileName;
@@ -33,10 +35,13 @@ class VueGenerator extends BaseGenerator
 
         $this->path = $this->config->paths->vue;
         $this->componentFileName = $this->path . 'src/components/' . $this->config->modelNames->name . '.ts';
+        $this->componentTableName = $this->path . 'src/components/Table' . $this->config->modelNames->name . '.vue';
+        $this->componentDbFieldName = $this->path . 'src/use/dbConst/' . $this->config->modelNames->dashed . '.ts';
         $this->modelFileName = $this->path . 'src/models/' .$this->config->modelNames->dashed . '.ts';
         $this->storeFileName = $this->path . 'src/store/modules/' .$this->config->modelNames->dashed . '.ts';
         $this->serviceFileName = $this->path . 'src/services/' .$this->config->modelNames->dashed . '.service.ts';
         $this->requestFileName = $this->path . 'src/models/requets/' .$this->config->modelNames->name . 'FormRequest.ts';
+
     }
 
     public function generateVueModel()
@@ -58,6 +63,24 @@ class VueGenerator extends BaseGenerator
 
         $this->config->commandComment(infy_nl() . 'Component Vue created: ');
         $this->config->commandInfo($this->componentFileName);
+    }
+    public function generateVueTableComponent()
+    {
+        $templateData = view('laravel-generator::vue.table', $this->variables())->render();
+
+        g_filesystem()->createFile($this->componentTableName, $templateData);
+
+        $this->config->commandComment(infy_nl() . 'Component Table Vue created: ');
+        $this->config->commandInfo($this->componentTableName);
+    }
+    public function generateVueDbFields()
+    {
+        $templateData = view('laravel-generator::vue.dbFields', $this->variables())->render();
+
+        g_filesystem()->createFile($this->componentDbFieldName, $templateData);
+
+        $this->config->commandComment(infy_nl() . 'Component dbFields Vue created: ');
+        $this->config->commandInfo($this->componentDbFieldName);
     }
 
     public function generateVueStore()

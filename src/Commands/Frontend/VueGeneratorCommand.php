@@ -38,6 +38,8 @@ class VueGeneratorCommand extends BaseCommand
             $modelGenerator->generateVueStore();
             $modelGenerator->generateFormRequest();
             $modelGenerator->generateVueAxiosService();
+            $modelGenerator->generateVueTableComponent();
+            $modelGenerator->generateVueDbFields();
 
         }
 
