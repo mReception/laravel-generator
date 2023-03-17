@@ -63,10 +63,10 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
           }
           try {
               const paginationForm = new PaginationForm(null, null, null, 'name', false, ['id', 'name'])
-              const {data} = await {{ $config->modelNames->camel }}Service.getOptions({status: ['active', 10]}, paginationForm)
+              const {data} = await {{ $config->modelNames->camelPlural }}Service.getOptions({status: ['active', 10]}, paginationForm)
               if (data.success) {
                   this.{{ $config->modelNames->camelPlural }}Options = []
-                  data.data.forEach((element: {{ $config->modelNames->name }} ) => this.{{ $config->modelNames->camelPlural }} Options.push({
+                  data.data.forEach((element: {{ $config->modelNames->name }} ) => this.{{ $config->modelNames->camelPlural }}Options.push({
                       id: element.id,
                       name: element.name,
                       field: '{{ $config->modelNames->camel }}_id',
@@ -145,7 +145,7 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
         this.errors = {message: '', errors: []}
     },
     setCurrentByIndex(index: number) {
-          this.current{{ $config->modelNames->name }} = this.t{{ $config->modelNames->camelPlural }}[index]
+          this.current{{ $config->modelNames->name }} = this.{{ $config->modelNames->camelPlural }}[index]
     },
     clearCurrent() {
           this.current{{ $config->modelNames->name }} = null
