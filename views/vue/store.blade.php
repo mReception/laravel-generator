@@ -5,12 +5,14 @@ import  {{ $config->modelNames->name }}FormRequest from 'src/models/requests/ {{
 import OptionsSelect from "src/models/common/options-select";
 import {PaginationForm} from "src/models/requests/PaginationForm";
 import Pagination from "src/models/common/pagination";
+import Errors from "src/models/common/errors";
+
 interface State {
     {{ $config->modelNames->camelPlural }}: {{ $config->modelNames->name }}[],
     current{{ $config->modelNames->name }}: {{ $config->modelNames->name }}|null,
     {{ $config->modelNames->camelPlural }}Options: OptionsSelect[],
     pagination: Pagination | null,
-    errors: { message: string, errors: [] },
+    errors: Errors,
 }
 
 
@@ -140,6 +142,9 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
     },
     findIndexByName(name: string) {
       return this.{{ $config->modelNames->camelPlural }}.findIndex((item: {{ $config->modelNames->name }}) => item.name === name);
+    },
+    setErrors(errors: Errors) {
+        this.errors = errors
     },
     clearErrors() {
         this.errors = {message: '', errors: []}
