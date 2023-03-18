@@ -1,7 +1,7 @@
 import httpClient from "src/services/http.service";
 import {{ $config->modelNames->name }} from 'src/models/{{ $config->modelNames->dashed }}';
 import {PaginationForm} from "src/models/requests/PaginationForm";
-import { {{ $config->modelNames->name }}FormRequest} from "src/models/requests/{{ $config->modelNames->name }}FormRequest";
+import { {{ $config->modelNames->name }}FormRequest } from "src/models/requests/{{ $config->modelNames->name }}FormRequest";
 
 const resourceRoute  = 'api/{{ $config->prefixes->getRoutePrefixWith('/') }}{{ $config->modelNames->dashedPlural }}'
 
