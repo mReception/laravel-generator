@@ -66,7 +66,7 @@
                     @elseif($property['filter_type']==='enum')
                         <div class="col-6 form-group">
                             <q-select v-model="form.{{$property['field_name']}}"
-                                      :options="[{{ implode(',',$property['enum_options']) }}]"
+                                      :options="['{{ implode("','",$property['enum_options']) }}']"
                                       label="{{ $property['human'] }}"
                                       :error-message="getValidationErrors('{{$property['field_name']}}')"
                                       :error="hasValidationErrors('{{$property['field_name']}}')"
