@@ -17,11 +17,11 @@
 
 <script setup>
 import BaseTable from 'components/layouts/BaseTable.vue';
-import BaseDialog from "components/layouts/BaseDialog.vue";
-import {reactive, ref} from "vue";
-import {dbFields} from "src/use/dbConsts/{{ $config->modelNames->dashed }}";
-import {columnsFromDbFields} from "src/use/baseTableHelper";
-import {use{{ $config->modelNames->name }}} from "stores/{{ $config->modelNames->dashed }}";
+import BaseDialog from 'components/layouts/BaseDialog.vue';
+import {reactive, ref} from 'vue';
+import {dbFields} from 'src/use/dbConsts/{{ $config->modelNames->dashed }}';
+import {columnsFromDbFields} from 'src/use/baseTableHelper';
+import {use{{ $config->modelNames->name }}} from 'stores/{{ $config->modelNames->dashed }}';
 import {{ $config->modelNames->name }}FormComponent from './{{ $config->modelNames->name }}FormComponent.vue'
 const title ='{{ $config->modelNames->human }}'
 const store = use{{ $config->modelNames->name }}()
