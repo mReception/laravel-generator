@@ -21,10 +21,10 @@ import BaseDialog from "components/layouts/BaseDialog.vue";
 import {reactive, ref, computed} from "vue";
 import {dbFields} from "src/use/dbConsts/{{ $config->modelNames->dashed }}";
 import {columnsFromDbFields} from "src/use/baseTableHelper";
-import {use{{ $config->modelNames->namePlural }}} from "stores/{{ $config->modelNames->dashed }}";
+import {use{{ $config->modelNames->plural }}} from "stores/{{ $config->modelNames->dashed }}";
 import {{ $config->modelNames->name }}FormComponent from 'src/components/{{ $config->modelNames->name }}FormComponent.vue'
 const title ='{{ $config->modelNames->human }}'
-const store = use{{ $config->modelNames->namePlural }}()
+const store = use{{ $config->modelNames->plural }}()
 const columns = reactive(columnsFromDbFields(dbFields));
 const selected = ref([])
 
