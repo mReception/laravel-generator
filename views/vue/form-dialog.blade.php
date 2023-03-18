@@ -67,7 +67,7 @@
     import {validationHelper} from 'src/utils/validationHelper';
 
     import { use{{ $config->modelNames->camelPlural }} } from "src/stores/{{ $config->modelNames->camelPlural }}";
-    import { {{ $config->modelNames->name }}Form} from "src/models/requests/{{ $config->modelNames->name }}Form";
+    import { {{ $config->modelNames->name }}RequestForm} from "src/models/requests/{{ $config->modelNames->name }}RequestForm";
 
     const {
         showValidationError,
