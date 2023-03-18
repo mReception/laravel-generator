@@ -569,9 +569,9 @@ class VueGenerator extends BaseGenerator
 
             $properties[$field->name] = [
                 'label' => $dbTypeValue ==='enum'?'select':null,
-                'filter_type' => $dbTypeValue ==='enum'?'select':(($jsType==='Date')?'date':null),
-                'multiple' => $dbTypeValue ==='enum'?'true':null,
-                'options' => $dbTypeValue ==='enum'?'[]]':null,
+                'filter_type' => $dbTypeValue ==='enum' || str_ends_with($field->name,'_id')?'select':(($jsType==='Date')?'date':null),
+                'multiple' => $dbTypeValue ==='enum' || str_ends_with($field->name,'_id')?'true':null,
+                'options' => $dbTypeValue ==='enum'?'[]':null,
                 'type' => $type,
                 'js_type' => $jsType,
                 'js_form_type' => $jsFormType ?? $jsType,
