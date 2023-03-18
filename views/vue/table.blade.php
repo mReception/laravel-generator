@@ -5,6 +5,7 @@
                 :fields="columns"
                 :store="store"
                 <?php echo  '@selected="(value) =>  selected = value"'; ?>
+                <?php echo  PHP_EOL; ?>
                 @edit="edit"
                 @add="add"
         />
