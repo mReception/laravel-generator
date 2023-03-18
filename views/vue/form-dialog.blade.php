@@ -63,6 +63,17 @@
                                 </template>
                             </q-input>
                         </div>
+                    @elseif($property['filter_type']==='enum')
+                        <div class="col-6 form-group">
+                            <q-select v-model="form.{{$property['field_name']}}"
+                                      :options="[{{ implode(',',$property['enum_options']) }}]"
+                                      label="{{ $property['human'] }}"
+                                      :error-message="getValidationErrors('{{$property['field_name']}}')"
+                                      :error="hasValidationErrors('{{$property['field_name']}}')"
+                                      :rules="[val => !!val || 'Field is required']"
+                            />
+                        </div>
+
                     @else
                         @if ($property['field_name']!=='id'
                                && $property['field_name']!=='created_at'

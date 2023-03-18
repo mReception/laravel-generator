@@ -569,7 +569,7 @@ class VueGenerator extends BaseGenerator
 
             $properties[$field->name] = [
                 'label' => $dbTypeValue ==='enum'?'select':null,
-                'filter_type' => $dbTypeValue ==='enum' || str_ends_with($field->name,'_id')?'select':(($jsType==='Date')?'date':null),
+                'filter_type' =>  str_ends_with($field->name,'_id')?'select':(($jsType==='Date')?'date':($dbTypeValue ==='enum'?'enum':null)),
                 'multiple' => $dbTypeValue ==='enum' || str_ends_with($field->name,'_id')?'true':null,
                 'options' => $dbTypeValue ==='enum'?'[]':null,
                 'type' => $type,
@@ -583,12 +583,12 @@ class VueGenerator extends BaseGenerator
                 'camel_plural' => Str::camel(Str::plural($jsName)),
                 'name_plural' => Str::plural($jsName),
                 'name_plural_title' => Str::title(Str::plural($jsName)),
-                'human' => $field->getHuman()
+                'human' => $field->getHuman(),
+                'enum_options' => $dbTypeValue ==='enum'? $field->htmlValues:null
 
             ];
 
         }
-
         return $properties;
     }
 
