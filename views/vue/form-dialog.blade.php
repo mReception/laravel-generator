@@ -4,7 +4,7 @@
       <div class="row q-gutter-y-md q-col-gutter-lg" style="align-items: flex-end">
           @foreach($properties as $name => $property)
               @if($property['js_name']!=='id')
-                  @if($property['filter_type']==='select' && $property['js_name'].endsWith('_id'))
+                  @if($property['filter_type']==='select' && str_ends_with($property['js_name'],'_id'))
                       <div class="col-6 form-group">
                           <q-select v-model="form.{{$property['js_name']}}" :options="{{ $property['camel_plural'] }}" label="{{ $property['human'] }}"
                                     :option-value="(item) => item === null ? '-1' : item.id"
@@ -115,7 +115,7 @@
 
     onMounted(async () => {
     @foreach($properties as $name => $property)
-        @if($property['filter_type']==='select' && $property['js_name'].endsWith('_id'))
+        @if($property['filter_type']==='select' && str_ends_with($property['js_name'],'_id'))
         await store{{ $property['name_plural'] }}.fetchOptions()
         @endif
     @endforeach
