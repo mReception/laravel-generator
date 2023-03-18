@@ -80,12 +80,6 @@
     import { use{{ $config->modelNames->camelPlural }} } from "src/stores/{{ $config->modelNames->camelPlural }}";
     import { {{ $config->modelNames->name }}RequestForm} from "src/models/requests/{{ $config->modelNames->name }}RequestForm";
 
-    const {
-        showValidationError,
-        getValidationErrors,
-        hasValidationErrors,
-        hasErrors
-    } = validationHelper(errors)
 
     @foreach($properties as $name => $property)
         @if($property['filter_type']==='select')
@@ -97,6 +91,12 @@
     const currentItem = computed(() => store.current{{ $config->modelNames->name }})
     const form = reactive(new {{ $config->modelNames->name }}Form())
     const errors = computed(() => store.errors)
+    const {
+        showValidationError,
+        getValidationErrors,
+        hasValidationErrors,
+        hasErrors
+    } = validationHelper(errors)
 
     @foreach($properties as $name => $property)
         @if($property['filter_type']==='select')
