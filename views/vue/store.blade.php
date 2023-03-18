@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import {useQuasar} from 'quasar'
 import {{ $config->modelNames->camelPlural }}Service from 'src/services/{{ $config->modelNames->camel }}.service';
 import {{ $config->modelNames->name }} from 'src/models/{{ $config->modelNames->dashedPlural }}';
-import  {{ $config->modelNames->name }}FormRequest from 'src/models/requests/ {{ $config->modelNames->name }}FormRequest';
+import  {{ $config->modelNames->name }}FormRequest from 'src/models/requests/{{ $config->modelNames->name }}FormRequest';
 import OptionsSelect from "src/models/common/options-select";
 import {PaginationForm} from "src/models/requests/PaginationForm";
 import Pagination from "src/models/common/pagination";
@@ -52,7 +52,7 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
   },
 
   actions: {
-    async fetchAll(form: {{ $config->modelNames->name }}RequestForm) {
+    async fetchAll(form: {{ $config->modelNames->name }}FormRequest) {
       try {
           const { data } = await {{ $config->modelNames->camelPlural }}Service.getAll(form);
         debugger
@@ -135,11 +135,11 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
             this.clearErrors()
              const {data} = await {{ $config->modelNames->camelPlural }}Service.update(form, id);
              if (data.success) {
-                const index = store.{{ $config->modelNames->camelPlural }}.findIndex((item)=> item.id === id)
+                const index = this.{{ $config->modelNames->camelPlural }}.findIndex((item)=> item.id === id)
                 if(index >=0) {
-                    store.{{ $config->modelNames->camelPlural }}[index] = data.data
+                    this.{{ $config->modelNames->camelPlural }}[index] = data.data
                 } else {
-                    store.{{ $config->modelNames->camelPlural }}.push(data.data)
+                    this.{{ $config->modelNames->camelPlural }}.push(data.data)
                 }
                 this.formDialog = false
                 this.current{{ $config->modelNames->name }} = null
