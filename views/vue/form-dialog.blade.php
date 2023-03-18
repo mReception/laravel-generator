@@ -96,7 +96,7 @@
 
 
     @foreach($properties as $name => $property)
-        @if($property['filter_type']==='select')
+        @if($property['filter_type']==='select' && str_ends_with($property['js_name'],'_id'))
     import { use{{ $property['name_plural'] }} } from "src/stores/{{ $property['camel_plural'] }}";
         @endif
     @endforeach
@@ -113,7 +113,7 @@
     } = validationHelper(errors)
 
     @foreach($properties as $name => $property)
-        @if($property['filter_type']==='select')
+        @if($property['filter_type']==='select' && str_ends_with($property['js_name'],'_id'))
     const store{{ $property['name_plural'] }} = use{{ $property['name_plural'] }}()
       @endif
     @endforeach
@@ -124,7 +124,7 @@
     }
 
     const update = () => {
-        store.update(form)
+        store.update(form, currentItem.value.id)
     }
 
     onMounted(async () => {
