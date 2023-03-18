@@ -5,7 +5,9 @@
                 @foreach($properties as $name => $property)
                     @if($property['filter_type']==='select' && str_ends_with($property['field_name'],'_id') && $property['field_name']!=='id')
                         <div class="col-6 form-group">
-                            <q-select v-model="form.{{$property['field_name']}}" :options="{{ $property['camel_plural'] }}" label="{{ $property['human'] }}"
+                            <q-select v-model="form.{{$property['field_name']}}"
+                                      :options="store{{ $property['name_plural_title'] }}.{{$property['camel_plural']}}Options"
+                                      label="{{ $property['human'] }}"
                                       :option-value="(item) => item === null ? '-1' : item.id"
                                       :option-label="(item) => item === null ? '-' : item.name"
                                       :error-message="getValidationErrors('{{$property['field_name']}}')"
@@ -100,8 +102,8 @@
 
 
         @foreach($properties as $name => $property)
-        @if($property['filter_type']==='select' && str_ends_with($property['js_name'],'_id'))
-    import { use{{ $property['name_plural'] }} } from "src/stores/{{ $property['camel_plural'] }}";
+        @if($property['filter_type']==='select' && str_ends_with($property['field_name'],'_id'))
+    import { use{{ $property['name_plural_title'] }} } from "src/stores/{{ $property['camel_plural'] }}";
     @endif
     @endforeach
 
@@ -117,8 +119,8 @@
     } = validationHelper(errors)
 
     @foreach($properties as $name => $property)
-    @if($property['filter_type']==='select' && str_ends_with($property['js_name'],'_id'))
-    const store{{ $property['name_plural'] }} = use{{ $property['name_plural'] }}()
+    @if($property['filter_type']==='select' && str_ends_with($property['field_name'],'_id'))
+    const store{{ $property['name_plural_title'] }} = use{{ $property['name_plural_title'] }}()
     @endif
     @endforeach
 
@@ -133,13 +135,13 @@
 
     onMounted(async () => {
         @foreach($properties as $name => $property)
-                @if($property['filter_type']==='select' && str_ends_with($property['js_name'],'_id'))
-            await store{{ $property['name_plural'] }}.fetchOptions()
+                @if($property['filter_type']==='select' && str_ends_with($property['field_name'],'_id'))
+            await store{{ $property['name_plural_title'] }}.fetchOptions()
         @endif
                 @endforeach
         if (currentItem.value && currentItem.value.id){
             @foreach($properties as $name => $property)
-                form.{{$property['js_name']}} = currentItem.value.{{$property['js_name']}}
+                form.{{$property['field_name']}} = currentItem.value.{{$property['field_name']}}
                     @endforeach
         }
     })

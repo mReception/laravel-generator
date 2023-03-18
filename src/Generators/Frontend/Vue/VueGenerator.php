@@ -582,6 +582,7 @@ class VueGenerator extends BaseGenerator
                 'row_name' => $field->name,
                 'camel_plural' => Str::camel(Str::plural($jsName)),
                 'name_plural' => Str::plural($jsName),
+                'name_plural_title' => Str::title(Str::plural($jsName)),
                 'human' => $field->getHuman()
 
             ];
