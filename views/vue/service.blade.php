@@ -15,11 +15,11 @@ const {{ Str::camel($config->modelNames->plural) }}Service = {
         return httpClient.get(resourceRoute, {params: {...paginationForm.toRequest(), data}} )
     },
 
-    async create({{ $config->modelNames->snake }}: {{ $config->modelNames->name }}) {
-        return httpClient.post(resourceRoute, {{ $config->modelNames->snake }})
+    async create(form: {{ $config->modelNames->name }}FormRequest) {
+        return httpClient.post(resourceRoute, form)
     },
 
-    async update(form: [], id: number) {
+    async update(form: {{ $config->modelNames->name }}FormRequest, id: number) {
         return httpClient.put(resourceRoute+'/' + id, form)
     },
 
