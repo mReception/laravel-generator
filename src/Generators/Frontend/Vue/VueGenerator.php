@@ -14,6 +14,7 @@ class VueGenerator extends BaseGenerator
     private string $componentFileName;
     private string $componentTableName;
     private string $componentFormName;
+    private string $componentFormDefaultName;
     private string $componentDbFieldName;
     private string $modelFileName;
     private string $storeFileName;
@@ -37,6 +38,7 @@ class VueGenerator extends BaseGenerator
         $this->path = $this->config->paths->vue;
         $this->componentFileName = $this->path . 'src/components/' . $this->config->modelNames->name . '.ts';
         $this->componentFormName = $this->path . 'src/components/' . $this->config->modelNames->name . 'FormComponent.vue';
+        $this->componentFormDefaultName = $this->path . 'src/components/' . $this->config->modelNames->name . 'DefaultFormComponent.vue';
         $this->componentTableName = $this->path . 'src/components/Table' . $this->config->modelNames->name . '.vue';
         $this->componentDbFieldName = $this->path . 'src/use/dbConst/' . $this->config->modelNames->dashed . '.ts';
         $this->modelFileName = $this->path . 'src/models/' .$this->config->modelNames->dashed . '.ts';
@@ -73,6 +75,15 @@ class VueGenerator extends BaseGenerator
         g_filesystem()->createFile($this->componentFormName, $templateData);
 
         $this->config->commandComment(infy_nl() . 'Component Form dialog Vue created: ');
+        $this->config->commandInfo($this->componentFormName);
+    }
+    public function generateVueFormDefaultComponent()
+    {
+        $templateData = view('laravel-generator::vue.form-dialog-default', $this->variables())->render();
+
+        g_filesystem()->createFile($this->componentFormDefaultName, $templateData);
+
+        $this->config->commandComment(infy_nl() . 'Component Form dialog default Vue created: ');
         $this->config->commandInfo($this->componentFormName);
     }
     public function generateVueTableComponent()
