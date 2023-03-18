@@ -52,9 +52,9 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
   },
 
   actions: {
-    async fetchAll(form: {{ $config->modelNames->name }}FormRequest) {
+    async fetchAll(form: {{ $config->modelNames->name }}FormRequest, paginationForm: PaginationForm) {
       try {
-          const { data } = await {{ $config->modelNames->camelPlural }}Service.getAll(form);
+          const { data } = await {{ $config->modelNames->camelPlural }}Service.getAll(form, paginationForm);
         debugger
         if (data.success) {
             this.{{ $config->modelNames->camelPlural }} = data.data
