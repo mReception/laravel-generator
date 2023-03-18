@@ -135,7 +135,12 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
             this.clearErrors()
              const {data} = await {{ $config->modelNames->camelPlural }}Service.update(form, id);
              if (data.success) {
-                this.{{ $config->modelNames->camel }}.push(data.data)
+                const index = store.{{ $config->modelNames->camelPlural }}.findIndex((item)=> item.id === id)
+                if(index >=0) {
+                    store.{{ $config->modelNames->camelPlural }}[index] = data.data
+                } else {
+                    store.{{ $config->modelNames->camelPlural }}.push(data.data)
+                }
                 this.formDialog = false
                 this.current{{ $config->modelNames->name }} = null
                 $q.notify({
@@ -145,7 +150,7 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
              }
         } catch (error: any) {
             console.error(error)
-            iif(error.response.status === 422)
+            if(error.response.status === 422)
             {
                 this.setErrors(error.response.data.errors)
                 $q.notify({

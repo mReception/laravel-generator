@@ -36,11 +36,11 @@
                           >
                               <template v-slot:prepend>
                                   <q-icon name="event" class="cursor-pointer">
-                                      <q-popup-proxy cover transition-show="scale" transition-hide="scale" ref="q{{ $property['name'] }}Proxy">
+                                      <q-popup-proxy cover transition-show="scale" transition-hide="scale" ref="q{{ $property['js_name'] }}Proxy">
                                           <q-date
                                                   v-model="form.{{$property['js_name']}}"
                                                   mask="DD/MM/YYYY"
-                                                  @update:model-value="$refs.{{ $property['name'] }}.hide();"
+                                                  @update:model-value="$refs.{{ $property['js_name'] }}.hide();"
                                           >
                                               <div class="row items-center justify-end">
                                                   <q-btn v-close-popup label="Close" color="primary" flat />
