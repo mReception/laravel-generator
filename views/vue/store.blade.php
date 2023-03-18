@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import {{ $config->modelNames->camelPlural }}Service from 'src/services/{{ $config->modelNames->camel }}.service';
 import {{ $config->modelNames->name }} from 'src/models/{{ $config->modelNames->dashedPlural }}';
-import {{ $config->modelNames->name }}RequestForm from 'src/models/requests/{{ $config->modelNames->name }}RequestForm';
+import  {{ $config->modelNames->name }}FormRequest from 'src/models/requests/ {{ $config->modelNames->name }}FormRequest';
 import OptionsSelect from "src/models/common/options-select";
 import {PaginationForm} from "src/models/requests/PaginationForm";
 import Pagination from "src/models/common/pagination";
