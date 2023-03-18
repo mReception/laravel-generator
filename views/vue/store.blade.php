@@ -1,11 +1,14 @@
 import { defineStore } from 'pinia';
+import {useQuasar} from 'quasar'
 import {{ $config->modelNames->camelPlural }}Service from 'src/services/{{ $config->modelNames->camel }}.service';
 import {{ $config->modelNames->name }} from 'src/models/{{ $config->modelNames->dashedPlural }}';
 import  {{ $config->modelNames->name }}FormRequest from 'src/models/requests/ {{ $config->modelNames->name }}FormRequest';
 import OptionsSelect from "src/models/common/options-select";
 import {PaginationForm} from "src/models/requests/PaginationForm";
 import Pagination from "src/models/common/pagination";
-import Errors from "src/models/common/errors";
+import {Errors} from "src/models/common/errors";
+
+const $q = useQuasar()
 
 interface State {
     {{ $config->modelNames->camelPlural }}: {{ $config->modelNames->name }}[],
@@ -13,6 +16,7 @@ interface State {
     {{ $config->modelNames->camelPlural }}Options: OptionsSelect[],
     pagination: Pagination | null,
     errors: Errors,
+    formDialog: boolean
 }
 
 
@@ -23,7 +27,8 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
         current{{ $config->modelNames->name }}: null,
         {{ $config->modelNames->camelPlural }}Options: [],
         pagination: null,
-        errors: {message: '', errors: []}
+        errors: new Errors([],''),
+        formDialog: false
     }
   },
 
@@ -39,6 +44,9 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
     },
     getCurrentItem(state) {
         return state.current{{ $config->modelNames->name }};
+    },
+    showFormDialog(state) {
+       return state.formDialog;
     }
 
   },
@@ -94,39 +102,64 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
     async create({{ $config->modelNames->camel }}: {{ $config->modelNames->name }}FormRequest) {
 
         try {
+            this.clearErrors()
             const {data} = await {{ $config->modelNames->camelPlural }}Service.create({{ $config->modelNames->camel }});
             if (data.success) {
                 this.{{ $config->modelNames->camelPlural }}.push(data.data)
+                this.formDialog = false
+                $q.notify({
+                    type: 'success',
+                    message: '{{ $config->modelNames->human }} was created.',
+                })
             }
         } catch (error: any) {
             console.error(error)
             if(error.response.status===422) {
                 this.setErrors (error.response.data.errors)
+                $q.notify({
+                type: 'negative',
+                    message: '{{ $config->modelNames->human }} was not created. Please, check form fields.',
+                })
             }
             if(error.response.status===500) {
                 this.setErrors(error.response.data.errors)
+                $q.notify({
+                    type: 'negative',
+                    message: '{{ $config->modelNames->human }} was not created. Errors occured.',
+                })
             }
-        }
-        finally {
-            this.clearErrors()
         }
     },
     async update(form: {{ $config->modelNames->name }}FormRequest, id: number) {
         try {
+            this.clearErrors()
              const {data} = await {{ $config->modelNames->camelPlural }}Service.update(form, id);
              if (data.success) {
                 this.{{ $config->modelNames->camel }}.push(data.data)
+                this.formDialog = false
+                this.current{{ $config->modelNames->name }} = null
+                $q.notify({
+                    type: 'success',
+                    message: '{{ $config->modelNames->human }} was updated.',
+                })
              }
         } catch (error: any) {
-             console.error(error)
-             if(error.response.status===422) {
-             this.setErrors (error.response.data.errors)
-        }
-        if(error.response.status===500) {
-            this.setErrors(error.response.data.errors)
-        }
-        } finally {
-            this.clearErrors()
+            console.error(error)
+            iif(error.response.status === 422)
+            {
+                this.setErrors(error.response.data.errors)
+                $q.notify({
+                    type: 'negative',
+                    message: '{{ $config->modelNames->human }} was not created. Please, check form fields.',
+                })
+            }
+            if (error.response.status === 500) {
+                this.setErrors(error.response.data.errors)
+                $q.notify({
+                    type: 'negative',
+                    message: '{{ $config->modelNames->human }} was not created. Errors occured.',
+                })
+            }
         }
     },
     async delete(id: number) {
@@ -155,7 +188,6 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
     clearCurrent() {
           this.current{{ $config->modelNames->name }} = null
     },
-
   }
 });
 

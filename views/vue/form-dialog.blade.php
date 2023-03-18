@@ -14,6 +14,19 @@
                                     :rules="[val => !!val || 'Field is required']"
                           />
                       </div>
+                  @elseif($property['js_type']==='boolean')
+                      <div class="row q-gutter-y-xs q-col-gutter-lg">
+                          <div class="col-lg-12 col-md-12 col-sm-12 form-group">
+                              <div class="pull-left">
+                                  <q-checkbox keep-color color="accent"
+                                              v-model="form.{{$property['js_name']}}"
+                                              label="{{ $property['human'] }}"
+                                              :error-message="getValidationErrors('{{$property['js_name']}}')"
+                                              :error="hasValidationErrors('{{$property['js_name']}}')"
+                                  />
+                              </div>
+                          </div>
+                      </div>
                   @elseif($property['filter_type']==='date')
                       <div class="col-6 form-group">
                           <q-input filled v-model="form.{{$property['js_name']}}"
@@ -63,9 +76,7 @@
 
 <script setup>
     import {reactive, ref, computed, onMounted, watch} from "vue";
-    import {date, useQuasar} from 'quasar'
     import {validationHelper} from 'src/utils/validationHelper';
-
     import { use{{ $config->modelNames->camelPlural }} } from "src/stores/{{ $config->modelNames->camelPlural }}";
     import { {{ $config->modelNames->name }}RequestForm} from "src/models/requests/{{ $config->modelNames->name }}RequestForm";
 
@@ -81,8 +92,6 @@
     import { use{{ $property['name_plural'] }} } from "src/stores/{{ $property['camel_plural'] }}";
         @endif
     @endforeach
-
-    const $q = useQuasar()
 
     const store = use{{ $config->modelNames->camelPlural }}()
     const currentItem = computed(() => store.current{{ $config->modelNames->name }})

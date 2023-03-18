@@ -9,7 +9,7 @@
                 @edit="edit"
                 @add="add"
         />
-        <base-dialog v-model="formDialog" :selected="selected" :itemId="itemId"  :title="title">
+        <base-dialog v-model="store.formDialog" :selected="selected" :itemId="itemId"  :title="title">
             <{{ $config->modelNames->dashed }}-form-component :items="selected"/>
         </base-dialog>
     </div>
@@ -18,7 +18,7 @@
 <script setup>
 import BaseTable from 'components/layouts/BaseTable.vue';
 import BaseDialog from "components/layouts/BaseDialog.vue";
-import {reactive, ref} from "vue";
+import {reactive, ref, computed} from "vue";
 import {dbFields} from "src/use/dbConsts/{{ $config->modelNames->dashed }}";
 import {columnsFromDbFields} from "src/use/baseTableHelper";
 import {use{{ $config->modelNames->camelPlural }}} from "stores/{{ $config->modelNames->dashed }}";
@@ -28,14 +28,19 @@ const store = use{{ $config->modelNames->camelPlural }}()
 const columns = reactive(columnsFromDbFields(dbFields));
 const selected = ref([])
 
-const formDialog = ref(false)
 const itemId = ref(null)
 const edit = id => {
-    formDialog.value = true
-    itemId.value = id
+    store.formDialog = true
+    const index = store.{{ $config->modelNames->camelPlural }}.findIndex((item)=> item.id === id)
+    if(index >=0) {
+        store.current{{ $config->modelNames->name }} = store.{{ $config->modelNames->camelPlural }}[index]
+        itemId.value = id
+    }
 }
 const add = () => {
-    formDialog.value = true
+    store.formDialog = true
+    store.current{{ $config->modelNames->name }} = null
+    itemId.value = null
 }
 
 </script>
