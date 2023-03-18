@@ -7,7 +7,7 @@ const resourceRoute  = 'api/{{ $config->prefixes->getRoutePrefixWith('/') }}{{ $
 
 const {{ Str::camel($config->modelNames->plural) }}Service = {
 
-    async getAll(form: {{ $config->modelNames->snake }}FormRequest, paginationForm: PaginationForm) {
+    async getAll(form: {{ $config->modelNames->name }}FormRequest, paginationForm: PaginationForm) {
         return httpClient.get(resourceRoute,{params: {...paginationForm.toRequest(),...form.toRequest()??{}}} )
     },
 
@@ -15,11 +15,11 @@ const {{ Str::camel($config->modelNames->plural) }}Service = {
         return httpClient.get(resourceRoute, {params: {...paginationForm.toRequest(), data}} )
     },
 
-    async create(form: {{ $config->modelNames->name }}RequestForm) {
+    async create(form: {{ $config->modelNames->name }}FormRequest) {
         return httpClient.post(resourceRoute, form)
     },
 
-    async update(form: {{ $config->modelNames->name }}RequestForm, id: number) {
+    async update(form: {{ $config->modelNames->name }}FormRequest, id: number) {
         return httpClient.put(resourceRoute+'/' + id, form)
     },
 

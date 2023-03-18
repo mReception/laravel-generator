@@ -101,7 +101,7 @@
         store.create(form)
     }
 
-    const save = () => {
+    const update = () => {
         store.update(form)
     }
 

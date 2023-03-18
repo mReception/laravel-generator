@@ -89,7 +89,7 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
           console.log(_)
       }
     },
-    async create({{ $config->modelNames->camel }}: {{ $config->modelNames->name }}RequestForm) {
+    async create({{ $config->modelNames->camel }}: {{ $config->modelNames->name }}FormRequest) {
 
         try {
             const {data} = await {{ $config->modelNames->camelPlural }}Service.create({{ $config->modelNames->camel }});
@@ -109,7 +109,7 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
             this.clearErrors()
         }
     },
-    async update(form: {{ $config->modelNames->name }}RequestForm, id: number) {
+    async update(form: {{ $config->modelNames->name }}FormRequest, id: number) {
         try {
              const {data} = await {{ $config->modelNames->camelPlural }}Service.update(form, id);
              if (data.success) {
