@@ -255,6 +255,14 @@ class GeneratorField
         }
         return Str::title(str_replace('_', ' ', $this->name));
     }
+    public function getHuman(): string {
+        if(str_ends_with( $this->name, '_id')){
+            $shortStr = str_replace('_id', '', $this->name);
+            $shortStr = Str::title(str_replace('_', ' ', $shortStr));
+            return  $shortStr;
+        }
+        return Str::title(str_replace('_', ' ', $this->name));
+    }
 
     public function getJsName(): string {
         if(str_ends_with( $this->name, '_id')){
