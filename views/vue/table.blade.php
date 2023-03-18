@@ -18,13 +18,13 @@
 <script setup>
 import BaseTable from 'components/layouts/BaseTable.vue';
 import BaseDialog from "components/layouts/BaseDialog.vue";
-import {reactive, ref, computed} from "vue";
+import {reactive, ref} from "vue";
 import {dbFields} from "src/use/dbConsts/{{ $config->modelNames->dashed }}";
 import {columnsFromDbFields} from "src/use/baseTableHelper";
-import {use{{ $config->modelNames->plural }}} from "stores/{{ $config->modelNames->dashed }}";
-import {{ $config->modelNames->name }}FormComponent from 'src/components/{{ $config->modelNames->name }}FormComponent.vue'
+import {use{{ $config->modelNames->name }}} from "stores/{{ $config->modelNames->dashed }}";
+import {{ $config->modelNames->name }}FormComponent from './{{ $config->modelNames->name }}FormComponent.vue'
 const title ='{{ $config->modelNames->human }}'
-const store = use{{ $config->modelNames->plural }}()
+const store = use{{ $config->modelNames->name }}()
 const columns = reactive(columnsFromDbFields(dbFields));
 const selected = ref([])
 
