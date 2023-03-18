@@ -55,7 +55,8 @@
     <q-separator/>
     <q-card-actions align="right">
           <q-btn flat class="text-accent" v-close-popup>Cancel</q-btn>
-          <q-btn flat class="text-accent" @click="save">Save</q-btn>
+          <q-btn flat class="text-accent" @click="update" v-if="form.id">Update</q-btn>
+          <q-btn flat class="text-accent" @click="save" v-else>Save</q-btn>
       </q-card-actions>
   </div>
 </template>
@@ -83,9 +84,9 @@
 
     const $q = useQuasar()
 
-    const form = reactive(new {{ $config->modelNames->name }}Form())
-
     const store = use{{ $config->modelNames->camelPlural }}()
+    const currentItem = computed(() => store.current{{ $config->modelNames->name }})
+    const form = reactive(new {{ $config->modelNames->name }}Form())
     const errors = computed(() => store.errors)
     const {hasErrors} = validationHelper(errors)
 
@@ -100,12 +101,23 @@
         store.create(form)
     }
 
+    const save = () => {
+        store.update(form)
+    }
+
     onMounted(async () => {
     @foreach($properties as $name => $property)
         @if($property['filter_type']==='select')
         await store{{ $property['name_plural'] }}.fetchOptions()
         @endif
     @endforeach
+        if (currentItem.value.id){
+            @foreach($properties as $name => $property)
+                    @if($property['filter_type']==='select')
+                form.{{$property['js_name']}} = currentItem.value.{{$property['js_name']}}
+            @endif
+            @endforeach
+        }
     })
 
 </script>
