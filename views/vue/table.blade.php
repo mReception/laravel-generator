@@ -2,7 +2,7 @@
     <div>
         <base-table
                 title="{{ $config->modelNames->human }}"
-                :fields="fields"
+                :fields="columns"
                 :store="store"
         />
     </div>
@@ -29,7 +29,6 @@
 
 </template>
 
-
 <script setup>
 
     import BaseTable from 'components/layouts/BaseTable.vue';
@@ -40,7 +39,6 @@
     import {{ $config->modelNames->name }}FormComponent from 'src/components/{{ $config->modelNames->name }}FormComponent.vue'
 
     const store = use{{ $config->modelNames->camelPlural }}()
-    const fields = [];
     const columns = reactive(columnsFromDbFields(dbFields));
 
     const formDialog = ref(false)
