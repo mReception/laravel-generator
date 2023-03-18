@@ -38,7 +38,7 @@
                     @elseif($property['filter_type']==='date'
                               && $property['field_name']!=='created_at'
                               && $property['field_name']!=='updated_at'
-                              && $property['field_name']!=='deleted_id'
+                              && $property['field_name']!=='deleted_at'
                               )
                         <div class="col-6 form-group">
                             <q-input filled v-model="form.{{$property['field_name']}}"
@@ -67,7 +67,7 @@
                         @if ($property['field_name']!=='id'
                                && $property['field_name']!=='created_at'
                               && $property['field_name']!=='updated_at'
-                              && $property['field_name']!=='deleted_id'
+                              && $property['field_name']!=='deleted_at'
                               && $property['filter_type']!=='select'
                               && $property['filter_type']!=='date'
                               )
