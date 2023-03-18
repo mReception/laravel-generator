@@ -32,6 +32,7 @@ class VueGeneratorCommand extends BaseCommand
         $this->fireFileCreatingEvent('vue');
 
         if ($this->config->options->vue) {
+            /** @var $modelGenerator VueGenerator */
             $modelGenerator = app(VueGenerator::class);
             $modelGenerator->generateVueModel();
             $modelGenerator->generateVueComponent();
@@ -41,6 +42,7 @@ class VueGeneratorCommand extends BaseCommand
             $modelGenerator->generateVueTableComponent();
             $modelGenerator->generateVueDbFields();
             $modelGenerator->generateVueFormComponent();
+            $modelGenerator->generateVueFormDefaultComponent();
 
         }
 
