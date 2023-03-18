@@ -36,7 +36,7 @@ class VueGenerator extends BaseGenerator
 
         $this->path = $this->config->paths->vue;
         $this->componentFileName = $this->path . 'src/components/' . $this->config->modelNames->name . '.ts';
-        $this->componentFormName = $this->path . 'src/components/' . $this->config->modelNames->name . 'FormComponent.ts';
+        $this->componentFormName = $this->path . 'src/components/' . $this->config->modelNames->name . 'FormComponent.vue';
         $this->componentTableName = $this->path . 'src/components/Table' . $this->config->modelNames->name . '.vue';
         $this->componentDbFieldName = $this->path . 'src/use/dbConst/' . $this->config->modelNames->dashed . '.ts';
         $this->modelFileName = $this->path . 'src/models/' .$this->config->modelNames->dashed . '.ts';

@@ -4,7 +4,7 @@
                 :title="title"
                 :fields="columns"
                 :store="store"
-                @selected="(value) =>  selected = value"
+                <?php echo  '@selected="(value) =>  selected = value"'; ?>
                 @edit="edit"
                 @add="add"
         />
