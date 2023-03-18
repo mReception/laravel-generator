@@ -3,8 +3,7 @@
     <q-card-section class="q-pa-md">
       <div class="row q-gutter-y-md q-col-gutter-lg" style="align-items: flex-end">
           @foreach($properties as $name => $property)
-              @if($property['js_name']!=='id')
-                  @if($property['filter_type']==='select' && str_ends_with($property['js_name'],'_id'))
+                  @if($property['filter_type']==='select' && str_ends_with($property['js_name'],'_id') && $property['js_name']!=='id')
                       <div class="col-6 form-group">
                           <q-select v-model="form.{{$property['js_name']}}" :options="{{ $property['camel_plural'] }}" label="{{ $property['human'] }}"
                                     :option-value="(item) => item === null ? '-1' : item.id"
@@ -14,7 +13,7 @@
                                     :rules="[val => !!val || 'Field is required']"
                           />
                       </div>
-                  @elseif($property['js_type']==='boolean')
+                  @elseif($property['js_type']==='boolean' && $property['js_name']!=='id')
                       <div class="row q-gutter-y-xs q-col-gutter-lg">
                           <div class="col-lg-12 col-md-12 col-sm-12 form-group">
                               <div class="pull-left">
@@ -24,23 +23,36 @@
                                               :error-message="getValidationErrors('{{$property['js_name']}}')"
                                               :error="hasValidationErrors('{{$property['js_name']}}')"
                                   />
+                                  <q-item tag="label" v-ripple>
+                                      <q-item-section>
+                                          <q-item-label class="p_relative d_block fs_16 font_family_poppins color_black mb_2">{{ $property['human'] }}*</q-item-label>
+                                          <q-item-label v-if="hasValidationErrors('priority_urgency')"
+                                                        color="orange-9"
+                                                        class="text-negative">
+                                              <?php echo "{{"?> getValidationErrors('{{$property['js_name']}}') <?php echo "}}"?>
+                                          </q-item-label>
+                                      </q-item-section>
+                                      <q-item-section avatar top>
+                                          <q-checkbox v-model="form.{{$property["js_name"]}}"  />
+                                      </q-item-section>
+                                  </q-item>
                               </div>
                           </div>
                       </div>
-                  @elseif($property['filter_type']==='date')
+                  @elseif($property['filter_type']==='date' && $property['js_name']!=='id')
                       <div class="col-6 form-group">
                           <q-input filled v-model="form.{{$property['js_name']}}"
                                    label="{{ $property['human'] }}"
-                                   :error-message="getValidationErrors({{$property['js_name']}})"
-                                   :error="hasValidationErrors({{$property['js_name']}})"
+                                   :error-message="getValidationErrors('{{$property['js_name']}}')"
+                                   :error="hasValidationErrors('{{$property['js_name']}}')"
                           >
                               <template v-slot:prepend>
                                   <q-icon name="event" class="cursor-pointer">
-                                      <q-popup-proxy cover transition-show="scale" transition-hide="scale" ref="q{{ $property['js_name'] }}Proxy">
+                                      <q-popup-proxy cover transition-show="scale" transition-hide="scale" ref="q{{ $property['row_name'] }}Proxy">
                                           <q-date
                                                   v-model="form.{{$property['js_name']}}"
                                                   mask="DD/MM/YYYY"
-                                                  @update:model-value="$refs.{{ $property['js_name'] }}.hide();"
+                                                  @update:model-value="$refs.{{ $property['row_name'] }}.hide();"
                                           >
                                               <div class="row items-center justify-end">
                                                   <q-btn v-close-popup label="Close" color="primary" flat />
@@ -52,6 +64,7 @@
                           </q-input>
                       </div>
                   @else
+                      @if ($property['js_name']!=='id')
                       <div class="col-6 form-group">
                           <label class="p_relative d_block fs_16 font_family_poppins color_black mb_2">{{ $property['human'] }}*</label>
                           <q-input dense outlined color="accent" v-model="form.{{$property['js_name']}}"
@@ -60,8 +73,9 @@
                                    :rules="[val => !!val || 'Field is required']"
                           />
                       </div>
+                      @endif
+
                   @endIf
-                @endif
           @endforeach
       </div>
     </q-card-section>
