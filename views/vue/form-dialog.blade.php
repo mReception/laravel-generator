@@ -8,8 +8,8 @@
                       <q-select v-model="form.{{$property['js_name']}}" :options="{{ $property['camel_plural'] }}" label="{{ $property['human'] }}"
                                 :option-value="(item) => item === null ? '-1' : item.id"
                                 :option-label="(item) => item === null ? '-' : item.name"
-                                :error-message="getValidationErrors({{$property['js_name']}})"
-                                :error="hasValidationErrors({{$property['js_name']}})"
+                                :error-message="getValidationErrors('{{$property['js_name']}}')"
+                                :error="hasValidationErrors('{{$property['js_name']}}')"
                                 :rules="[val => !!val || 'Field is required']"
                       />
                   </div>
@@ -41,7 +41,7 @@
               @else
                   <div class="col-6 form-group">
                       <label class="p_relative d_block fs_16 font_family_poppins color_black mb_2">{{ $property['human'] }}*</label>
-                      <q-input dense outlined color="accent" v-model="{{$property['js_name']}}"
+                      <q-input dense outlined color="accent" v-model="form.{{$property['js_name']}}"
                                :error-message="getValidationErrors('{{$property['js_name']}}')"
                                :error="hasValidationErrors('{{$property['js_name']}}')"
                                :rules="[val => !!val || 'Field is required']"
