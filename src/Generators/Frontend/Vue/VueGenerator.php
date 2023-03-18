@@ -579,8 +579,8 @@ class VueGenerator extends BaseGenerator
                 'js_import' => $jsImport ?? '',
                 'name' => $field->name . '/*' . $field->dbType . '*/',
                 'row_name' => $field->name,
-                'camel_plural' => Str::camel(Str::plural($jsType)),
-                'name_plural' => Str::plural($jsType),
+                'camel_plural' => Str::camel(Str::plural($jsName)),
+                'name_plural' => Str::plural($jsName),
                 'human' => $field->getHuman()
 
             ];
