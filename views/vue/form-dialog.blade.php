@@ -3,7 +3,6 @@
     <q-card-section class="q-pa-md">
       <div class="row q-gutter-y-md q-col-gutter-lg" style="align-items: flex-end">
           @foreach($properties as $name => $property)
-              {{ $property['js_name'] }}: {{ $property['js_type'] }};
               @if($property['filter_type']==='select')
                   <div class="col-6 form-group">
                       <q-select v-model="form.{{$property['js_name']}}" :options="{{ $property['camel_plural'] }}" label="{{ $property['human'] }}"
