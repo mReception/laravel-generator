@@ -3,7 +3,7 @@
 namespace InfyOm\Generator\Commands\Publish;
 
 use Symfony\Component\Console\Input\InputOption;
-
+use Illuminate\Support\Facades\File;
 class GeneratorPublishCommand extends PublishBaseCommand
 {
     /**
@@ -22,9 +22,11 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
     public function handle()
     {
+        $this->publishVueStabs();
         $this->updateRouteServiceProvider();
         $this->publishTestCases();
         $this->publishBaseController();
+
         $repositoryPattern = config('laravel_generator.options.repository_pattern', true);
         if ($repositoryPattern) {
             $this->publishBaseRepository();
@@ -110,6 +112,41 @@ class GeneratorPublishCommand extends PublishBaseCommand
 
         $this->info('AppBaseController created');
     }
+    private function publishVueStabs()
+    {
+        $stubsPath = realpath(__DIR__ . '/../../../stubs/vue');
+
+        $sourceDirectory = $stubsPath;
+        $destinationDirectory = base_path('frontend/src');
+
+        // Create the destination directory if it doesn't exist
+        if (! File::exists($destinationDirectory)) {
+            File::makeDirectory($destinationDirectory, 0755, true);
+        }
+
+        $files = File::allFiles($sourceDirectory);
+
+        foreach ($files as $file) {
+            $relativePath = substr($file->getPathname(), strlen($sourceDirectory) + 1);
+            $relativePathDir = substr($file->getPath(), strlen($sourceDirectory) + 1);
+
+            $destinationPath = $destinationDirectory . '/' . $relativePath;
+            $destinationPathDir = $destinationDirectory . '/' . $relativePathDir;
+
+            if ( !is_dir( $destinationPathDir ) ) {
+                File::makeDirectory($destinationPathDir, 0755, true);
+            }
+            // Create the destination directory if it doesn't exist
+
+            File::copy($file->getPathname(), $destinationPath);
+
+        }
+
+
+        $this->info('Vue stabs created');
+    }
+
+
 
     private function publishBaseRepository()
     {
