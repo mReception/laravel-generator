@@ -13,6 +13,7 @@ class VueGenerator extends BaseGenerator
 
     private string $componentFileName;
     private string $componentTableName;
+    private string $pageName;
     private string $componentFormName;
     private string $componentFormDefaultName;
     private string $componentDbFieldName;
@@ -38,6 +39,7 @@ class VueGenerator extends BaseGenerator
         $this->path = $this->config->paths->vue;
         $this->componentFileName = $this->path . 'src/components/' . $this->config->modelNames->name . '.ts';
         $this->componentFormName = $this->path . 'src/components/' . $this->config->modelNames->name . 'FormComponent.vue';
+        $this->pageName = $this->path . 'src/pages/' . $this->config->modelNames->name . 'Page.vue';
         $this->componentFormDefaultName = $this->path . 'src/components/' . $this->config->modelNames->name . 'DefaultFormComponent.vue';
         $this->componentTableName = $this->path . 'src/components/Table' . $this->config->modelNames->name . '.vue';
         $this->componentDbFieldName = $this->path . 'src/use/dbConst/' . $this->config->modelNames->dashed . '.ts';
@@ -59,6 +61,15 @@ class VueGenerator extends BaseGenerator
 
     }
 
+    public function generateVuePage()
+    {
+        $templateData = view('laravel-generator::vue.page', $this->variables())->render();
+
+        g_filesystem()->createFile($this->pageName, $templateData);
+
+        $this->config->commandComment(infy_nl() . 'Page Vue created: ');
+        $this->config->commandInfo($this->pageName);
+    }
     public function generateVueComponent()
     {
         $templateData = view('laravel-generator::vue.component', $this->variables())->render();
