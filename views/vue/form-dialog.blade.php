@@ -152,8 +152,15 @@
                 @endforeach
         if (currentItem.value && currentItem.value.id){
             @foreach($properties as $name => $property)
-                form.{{$property['field_name']}} = currentItem.value.{{$property['field_name']}}
-                    @endforeach
+                @if($property['filter_type']==='select' && str_ends_with($property['field_name'],'_id'))
+                const store{{ $property['name_plural_title'] }}Index = store{{ $property['name_plural_title'] }}.{{$property['camel_plural']}}Options.findIndex((item)=> item.id === currentItem.value.{{$property['field_name']}})
+                if(store{{ $property['name_plural_title'] }}Index >=0) {
+                    currentItem.value.{{$property['field_name']}} = store{{ $property['name_plural_title'] }}.{{$property['camel_plural']}}Options[store{{ $property['name_plural_title'] }}Index]
+                }
+                @else
+                    form.{{$property['field_name']}} = currentItem.value.{{$property['field_name']}}
+                @endif
+            @endforeach
         }
     })
 
