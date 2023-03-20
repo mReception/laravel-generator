@@ -32,6 +32,7 @@ class VueGeneratorCommand extends BaseCommand
         $this->fireFileCreatingEvent('vue');
 
         if ($this->config->options->vue) {
+            dd(1);
             /** @var $modelGenerator VueGenerator */
             $modelGenerator = app(VueGenerator::class);
             $modelGenerator->generateVuePage();
