@@ -18,17 +18,32 @@ import {onMounted, reactive} from 'vue';
 import {use{{ $config->modelNames->plural }}} from 'stores/{{ $config->modelNames->dashed }}';
 import BaseForm from 'components/layouts/BaseForm.vue';
 import {dbFieldsTypes} from 'src/use/dbConsts/{{ $config->modelNames->dashed }}';
-import {useProcessingStatus} from 'stores/processing/processing-status';
+@foreach($properties as $name => $property)
+@if($property['filter_type']==='select' && str_ends_with($property['field_name'],'_id'))
+import { use{{ $property['name_plural_title'] }} } from 'src/stores/{{ $property['import'] }}';
+@endif
+@endforeach
+
 import {baseFormHelper} from 'src/use/baseFormHelper';
 
 const store = use{{ $config->modelNames->plural }}()
-const storeStatus = useProcessingStatus()
+
+@foreach($properties as $name => $property)
+@if($property['filter_type']==='select' && str_ends_with($property['field_name'],'_id'))
+const store{{ $property['name_plural_title'] }} = use{{ $property['name_plural_title'] }}()
+@endif
+@endforeach
+
 
 const saveModel = reactive({})
 const {setOptions, saveOrUpdate, loading} = baseFormHelper(store, saveModel, dbFieldsTypes)
 
 onMounted(async () => {
-    setOptions('processing_status_id', storeStatus)
+    @foreach($properties as $name => $property)
+    @if($property['filter_type']==='select' && str_ends_with($property['field_name'],'_id'))
+    setOptions('{{$property['field_name']}}', store{{ $property['name_plural_title'] }})
+    @endif
+    @endforeach
 })
 </script>
 

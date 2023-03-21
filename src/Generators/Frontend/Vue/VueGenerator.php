@@ -606,6 +606,8 @@ class VueGenerator extends BaseGenerator
                 'name_plural' => Str::plural($jsName),
                 'name_plural_title' => Str::title(Str::plural($jsName)),
                 'human' => $field->getHuman(),
+                'dashed' => Str::kebab($jsName),
+                'import' => Str::singular(Str::kebab($jsName)),
                 'enum_options' => $dbTypeValue ==='enum'? $field->htmlValues:null
 
             ];
