@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia';
 import {useQuasar} from 'quasar'
 import {{ $config->modelNames->camelPlural }}Service from 'src/services/{{ $config->modelNames->camel }}.service';
-import {{ $config->modelNames->name }} from 'src/models/{{ $config->modelNames->dashed }}';
+import { {{ $config->modelNames->name }} } from 'src/models/{{ $config->modelNames->dashed }}';
 import { {{ $config->modelNames->name }}FormRequest } from 'src/models/requests/{{ $config->modelNames->name }}FormRequest';
-import OptionsSelect from "src/models/common/options-select";
-import {PaginationForm} from "src/models/requests/PaginationForm";
-import Pagination from "src/models/common/pagination";
-import {Errors} from "src/models/common/errors";
+import OptionsSelect from 'src/models/common/options-select';
+import {PaginationForm} from 'src/models/requests/PaginationForm';
+import Pagination from 'src/models/common/pagination';
+import Errors from 'src/models/common/errors';
 
 const $q = useQuasar()
 
@@ -55,17 +55,17 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
     async fetchAll(form: {{ $config->modelNames->name }}FormRequest, paginationForm: PaginationForm) {
       try {
           const { data } = await {{ $config->modelNames->camelPlural }}Service.getAll(form, paginationForm);
-        if (data.success) {
+          if (data.success) {
             this.{{ $config->modelNames->camelPlural }} = data.data
-        }
-      } catch (_) {
-          console.log(_)
+          }
+      } catch (error: any) {
+        console.error(error)
       }
     },
-        set{{ $config->modelNames->name }} ({{ $config->modelNames->camel }}: {{ $config->modelNames->name }}) {
-        this.{{ $config->modelNames->camel }} = {{ $config->modelNames->camel }}
+    set{{ $config->modelNames->name }} ({{ $config->modelNames->camel }}: {{ $config->modelNames->name }}) {
+        this.current{{ $config->modelNames->name }} = {{ $config->modelNames->camel }}
     },
-    async  fetchOptions(fetchIfNotEmpty = false)
+    async fetchOptions(fetchIfNotEmpty = false)
       {
           if (fetchIfNotEmpty && this.getOptions.length !== 0) {
               return
@@ -95,7 +95,7 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
           }
         }
       } catch (_) {
-          console.log(_)
+          console.error(_)
       }
     },
     async create({{ $config->modelNames->camel }}: {{ $config->modelNames->name }}FormRequest) {
@@ -184,7 +184,7 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
         this.errors = errors
     },
     clearErrors() {
-        this.errors = {message: '', errors: []}
+        this.errors = {message: '', errors: [], status: 200}
     },
     setCurrentByIndex(index: number) {
           this.current{{ $config->modelNames->name }} = this.{{ $config->modelNames->camelPlural }}[index]
