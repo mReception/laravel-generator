@@ -15,13 +15,13 @@
 
 <script setup>
 import {onMounted, reactive} from 'vue';
-import {use{{ $config->modelNames->name }}} from 'stores/{{ $config->modelNames->dashed }}';
+import {use{{ $config->modelNames->plural }}} from 'stores/{{ $config->modelNames->dashed }}';
 import BaseForm from 'components/layouts/BaseForm.vue';
 import {dbFieldsTypes} from 'src/use/dbConsts/{{ $config->modelNames->dashed }}';
 import {useProcessingStatus} from 'stores/processing/processing-status';
 import {baseFormHelper} from 'src/use/baseFormHelper';
 
-const store = use{{ $config->modelNames->name }}()
+const store = use{{ $config->modelNames->plural }}()
 const storeStatus = useProcessingStatus()
 
 const saveModel = reactive({})
