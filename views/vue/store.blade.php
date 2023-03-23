@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import {useQuasar} from 'quasar'
 import {{ $config->modelNames->camelPlural }}Service from 'src/services/{{ $config->modelNames->dashed }}.service';
-import { {{ $config->modelNames->name }} } from 'src/models/{{ $config->modelNames->dashed }}';
+import { {{ $config->modelNames->name }} }  from 'src/models/{{ $config->modelNames->dashed }}';
 import { {{ $config->modelNames->name }}FormRequest } from 'src/models/requests/{{ $config->modelNames->name }}FormRequest';
 import OptionsSelect from 'src/models/common/options-select';
 import {PaginationForm} from 'src/models/requests/PaginationForm';
@@ -27,7 +27,7 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
         current{{ $config->modelNames->name }}: null,
         {{ $config->modelNames->camelPlural }}Options: [],
         pagination: null,
-        errors: new Errors([],''),
+        errors: new Errors('',[]),
         formDialog: false
     }
   },
@@ -57,6 +57,13 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
           const { data } = await {{ $config->modelNames->camelPlural }}Service.getAll(form, paginationForm);
           if (data.success) {
             this.{{ $config->modelNames->camelPlural }} = data.data
+            this.pagination = {
+                sortBy: paginationForm.sortBy ?? 'desc',
+                descending: paginationForm.descending ?? false,
+                page: data.current_page,
+                rowsPerPage: data.per_page,
+                rowsNumber: data.total,
+            }
           }
       } catch (error: any) {
         console.error(error)

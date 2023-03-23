@@ -32,6 +32,8 @@ import {{ $config->modelNames->name }}FormComponent from './{{ $config->modelNam
 @foreach($properties as $name => $property)
 @if($property['filter_type']==='select' && str_ends_with($property['field_name'],'_id'))
 import { use{{ $property['name_plural_title'] }} } from 'src/stores/{{ $property['import'] }}';
+@elseif($property['filter_type']==='enum')
+import { {{$property['class']}}Enum } from 'src/use/dbConsts/{{ $config->modelNames->dashed }}';
 @endif
 @endforeach
 
@@ -47,12 +49,19 @@ const columns = reactive(columnsFromDbFields(dbFields));
 const selected = ref([])
 const itemId = ref(null)
 
-const {addColumnOptions} = baseTableHelper(columns);
+const {addColumnOptions, addEnumSelect} = baseTableHelper(columns);
+
 onMounted(async () => {
 @foreach($properties as $name => $property)
+@if($property['filter_type']==='enum')
+    addEnumSelect('{{$property['field_name']}}', {{$property['class']}}Enum)
+@endif
+@endforeach
+@foreach($properties as $name => $property)
 @if($property['filter_type']==='select' && str_ends_with($property['field_name'],'_id'))
-    await store{{ $property['name_plural_title'] }}.fetchOptions(true)
-    addColumnOptions('{{$property['field_name']}}', store{{ $property['name_plural_title'] }}.getOptions)
+     store{{ $property['name_plural_title'] }}.fetchOptions(true).then(() => {
+        addColumnOptions('{{$property['field_name']}}', store{{ $property['name_plural_title'] }}.getOptions)
+    })
 @endif
 @endforeach
 })
