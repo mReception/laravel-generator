@@ -99,6 +99,7 @@ class VueGenerator extends BaseGenerator
     }
     public function generateVueTableComponent()
     {
+
         $templateData = view('laravel-generator::vue.table', $this->variables())->render();
 
         g_filesystem()->createFile($this->componentTableName, $templateData);
@@ -605,6 +606,7 @@ class VueGenerator extends BaseGenerator
                 'camel_plural' => Str::camel(Str::plural($jsName)),
                 'name_plural' => Str::plural($jsName),
                 'name_plural_title' => Str::title(Str::plural($jsName)),
+                'class' => Str::studly(Str::camel($jsName)),
                 'human' => $field->getHuman(),
                 'dashed' => Str::kebab($jsName),
                 'import' => Str::singular(Str::kebab($jsName)),

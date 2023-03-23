@@ -6,6 +6,7 @@
                 :store="store"
                 <?php echo  '@selected="(value) =>  selected = value"'; ?>
                 <?php echo  PHP_EOL; ?>
+                :custom-cells="customCells"
                 @edit="edit"
                 @add="add"
         />
@@ -24,7 +25,7 @@ import ObjectWithNameCell from 'components/base-table/ObjectWithNameCell.vue';
 import GetUserNameCell from 'components/base-table/GetUserNameCell.vue';
 import {baseTableHelper, columnsFromDbFields} from "src/use/baseTableHelper";
 import FormattedDateCell from 'components/base-table/formatted-date-cell.vue';
-
+import YesNoCell from "components/base-table/YesNoCell.vue";
 import {use{{ $config->modelNames->plural }}} from 'stores/{{ $config->modelNames->dashed }}';
 import {{ $config->modelNames->name }}FormComponent from './{{ $config->modelNames->name }}FormComponent.vue'
 
@@ -48,12 +49,12 @@ const itemId = ref(null)
 
 const {addColumnOptions} = baseTableHelper(columns);
 onMounted(async () => {
-    @foreach($properties as $name => $property)
-        @if($property['filter_type']==='select' && str_ends_with($property['field_name'],'_id'))
-        await store{{ $property['name_plural_title'] }}.getOptions(true)
+@foreach($properties as $name => $property)
+@if($property['filter_type']==='select' && str_ends_with($property['field_name'],'_id'))
+    await store{{ $property['name_plural_title'] }}.fetchOptions(true)
     addColumnOptions('{{$property['field_name']}}', store{{ $property['name_plural_title'] }}.getOptions)
-    @endif
-    @endforeach
+@endif
+@endforeach
 })
 
 const edit = id => {
@@ -71,17 +72,19 @@ const add = () => {
 }
 
 const customCells = [
-    @foreach($properties as $name => $property)
-    @if($property['filter_type']==='select' && str_ends_with($property['field_name'],'_id'))
-         @if(str_starts_with($property['field_name'],'user'))
-         {field: '{{$property['field_name']}}', secondField: 'report_to_user', component: GetUserNameCell},
-          @else
-         {field: '{{$property['field_name']}}', component: ObjectWithNameCell},
-         @endif
-    @elseif($property['filter_type']==='date')
-         {field: 'created_at', component: FormattedDateCell, title: 'Date'},
-    @endif
-    @endforeach
+@foreach($properties as $name => $property)
+@if($property['filter_type']==='select' && str_ends_with($property['field_name'],'_id'))
+@if(str_starts_with($property['field_name'],'user'))
+    {field: '{{$property['field_name']}}', secondField: '{{str_replace('_id','',$property['field_name'])}}', component: GetUserNameCell},
+@else
+    {field: '{{$property['field_name']}}',  secondField: '{{str_replace('_id','',$property['field_name'])}}', component: ObjectWithNameCell},
+@endif
+@elseif($property['filter_type']==='date')
+    {field: '{{$property['field_name']}}', component: FormattedDateCell, title: 'Date'},
+@elseif($property['type']=='boolean')
+    {field: '{{$property['field_name']}}', component: YesNoCell},
+@endif
+@endforeach
 ]
 
 </script>
