@@ -47,8 +47,10 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
     },
     showFormDialog(state) {
        return state.formDialog;
-    }
-
+    },
+    serverPagination(state) {
+        return state.pagination;
+    },
   },
 
   actions: {
