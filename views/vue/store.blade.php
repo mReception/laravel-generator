@@ -6,7 +6,7 @@ import { {{ $config->modelNames->name }}FormRequest } from 'src/models/requests/
 import OptionsSelect from 'src/models/common/options-select';
 import {PaginationForm} from 'src/models/requests/PaginationForm';
 import Pagination from 'src/models/common/pagination';
-import Errors from 'src/models/common/errors';
+import {Errors} from 'src/models/common/errors';
 
 const $q = useQuasar()
 
@@ -27,7 +27,7 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
         current{{ $config->modelNames->name }}: null,
         {{ $config->modelNames->camelPlural }}Options: [],
         pagination: null,
-        errors: new Errors('',[]),
+        errors: new Errors([],''),
         formDialog: false
     }
   },

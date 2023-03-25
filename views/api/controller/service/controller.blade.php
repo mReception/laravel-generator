@@ -24,11 +24,24 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
     {!! $docIndex !!}
     public function index(Request $request): JsonResponse
     {
-        ${{ $config->modelNames->camelPlural }} = $this->{{ $config->modelNames->camel }}Repository->all(
-            $request->except(['skip', 'limit']),
-            $request->get('skip'),
-            $request->get('limit')
-        );
+        if(empty($request->get('limit'))) {
+            ${{ $config->modelNames->camelPlural }} = $this->{{ $config->modelNames->camel }}Repository->all(
+                $request->except(['skip', 'limit']),
+                $request->get('skip'),
+                $request->get('limit'),
+                $request->get('columns')??['*']
+            );
+        } else {
+            ${{ $config->modelNames->camelPlural }} = $this->{{ $config->modelNames->camel }}Repository->paginate(
+                $request->get('limit'),
+                $request->get('columns')?? ['*'],
+                $request->get('skip'),
+                $request->get('search')??[],
+                $request->get('sortBy'),
+                $request->get('descending'),
+                $request->get('filter')
+            );
+        }
 
 @if($config->options->localized)
         return $this->sendResponse(
