@@ -17,6 +17,8 @@ return [
 
         'model'             => app_path('Models/'),
 
+        'enums'             => app_path('Enums/'),
+
         'datatables'        => app_path('DataTables/'),
 
         'livewire_tables'   => app_path('Http/Livewire/'),
@@ -78,6 +80,8 @@ return [
     'namespace' => [
 
         'model'             => 'App\Models',
+
+        'enums'             => 'App\Enums',
 
         'datatables'        => 'App\DataTables',
 

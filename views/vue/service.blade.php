@@ -1,37 +1,16 @@
-import httpClient from "src/services/http.service";
-import {{ $config->modelNames->name }} from 'src/models/{{ $config->modelNames->dashed }}';
-import {PaginationForm} from "src/models/requests/PaginationForm";
+export default {{ Str::camel($config->modelNames->plural) }}Service;
+
 import { {{ $config->modelNames->name }}FormRequest } from "src/models/requests/{{ $config->modelNames->name }}FormRequest";
+import BaseService from "src/services/BaseService";
 
-const resourceRoute  = 'api/{{ $config->prefixes->getRoutePrefixWith('/') }}{{ $config->modelNames->dashedPlural }}'
+class {{ $config->modelNames->name }}Service extends BaseService<{{ $config->modelNames->name }}FormRequest> {
+    constructor() {
+    super('api/{{ $config->modelNames->dashedPlural }}');
+    }
+    // Add more overridden methods as needed
+}
 
-const {{ Str::camel($config->modelNames->plural) }}Service = {
-
-    async getAll(form: {{ $config->modelNames->name }}FormRequest, paginationForm: PaginationForm) {
-        return httpClient.get(resourceRoute,{params: {...paginationForm.toRequest(),...form.toRequest()??{}}} )
-    },
-
-    async getOptions(data:any, paginationForm: PaginationForm ) {
-        return httpClient.get(resourceRoute, {params: {...paginationForm.toRequest(), data}} )
-    },
-
-    async create(form: {{ $config->modelNames->name }}FormRequest) {
-        return httpClient.post(resourceRoute, form)
-    },
-
-    async update(form: {{ $config->modelNames->name }}FormRequest, id: number) {
-        return httpClient.put(resourceRoute+'/' + id, form)
-    },
-
-    async get(id: number) {
-        return httpClient.get(resourceRoute+'/' + id)
-    },
-
-    async delete(id: number) {
-        return httpClient.delete(resourceRoute+'/' + id)
-    },
-
-};
+const {{ Str::camel($config->modelNames->plural) }}Service = new {{ $config->modelNames->name }}Service();
 
 export default {{ Str::camel($config->modelNames->plural) }}Service;
 

@@ -1,5 +1,5 @@
 @php
-    echo "<?php".PHP_EOL;
+    echo '<?php'.PHP_EOL;
 @endphp
 
 namespace {{ $config->namespaces->model }};
@@ -41,4 +41,12 @@ class {{ $config->modelNames->name }} extends Model
     ];
 
     {!! $relations !!}
+
+    public function toArrayForRelation(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name??"",
+        ];
+    }
 }
