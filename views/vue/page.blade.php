@@ -5,5 +5,5 @@
 </template>
 
 <script setup>
-import Table{{ $config->modelNames->name }} from "components/settings/iban/{{ $config->modelNames->name }}Iban.vue";
+import Table{{ $config->modelNames->name }} from "components/Table{{ $config->modelNames->name }}.vue";
 </script>
