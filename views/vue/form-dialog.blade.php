@@ -108,18 +108,18 @@
 <script setup>
     import {reactive, ref, computed, onMounted, watch} from "vue";
     import {validationHelper} from 'src/utils/validationHelper';
-    import { use{{ $config->modelNames->plural }} } from "src/stores/{{ $config->modelNames->camel }}";
+    import { use{{ $config->modelNames->plural }} } from "src/stores/{{ $config->modelNames->dashed }}";
     import { {{ $config->modelNames->name }}FormRequest} from "src/models/requests/{{ $config->modelNames->name }}FormRequest";
 
 
         @foreach($properties as $name => $property)
         @if($property['filter_type']==='select' && str_ends_with($property['field_name'],'_id'))
-    import { use{{ $property['name_plural_title'] }} } from "src/stores/{{ $property['camel_plural'] }}";
+    import { use{{ $property['name_plural_title'] }} } from "src/stores/{{ $property['dashed'] }}";
     @endif
     @endforeach
 
     const store = use{{ $config->modelNames->plural }}()
-    const currentItem = computed(() => store.current{{ $config->modelNames->name }})
+    const currentItem = computed(() => store.getOptions);
     const form = reactive(new {{ $config->modelNames->name }}FormRequest())
     const errors = computed(() => store.errors)
     const {
@@ -153,9 +153,9 @@
         if (currentItem.value && currentItem.value.id){
             @foreach($properties as $name => $property)
                 @if($property['filter_type']==='select' && str_ends_with($property['field_name'],'_id'))
-                const store{{ $property['name_plural_title'] }}Index = store{{ $property['name_plural_title'] }}.{{$property['camel_plural']}}Options.findIndex((item)=> item.id === currentItem.value.{{$property['field_name']}})
+                const store{{ $property['name_plural_title'] }}Index = store{{ $property['name_plural_title'] }}.getOptions.findIndex((item)=> item.id === currentItem.value.{{$property['field_name']}})
                 if(store{{ $property['name_plural_title'] }}Index >=0) {
-                    currentItem.value.{{$property['field_name']}} = store{{ $property['name_plural_title'] }}.{{$property['camel_plural']}}Options[store{{ $property['name_plural_title'] }}Index]
+                    currentItem.value.{{$property['field_name']}} = store{{ $property['name_plural_title'] }}.getOptions[store{{ $property['name_plural_title'] }}Index]
                 }
                 @else
                     form.{{$property['field_name']}} = currentItem.value.{{$property['field_name']}}

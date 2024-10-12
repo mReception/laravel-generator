@@ -68,9 +68,9 @@ onMounted(async () => {
 
 const edit = id => {
     store.formDialog = true
-    const index = store.{{ $config->modelNames->camelPlural }}.findIndex((item)=> item.id === id)
+    const index = store.list.findIndex((item)=> item.id === id)
     if(index >=0) {
-        store.current{{ $config->modelNames->name }} = store.{{ $config->modelNames->camelPlural }}[index]
+        store.current{{ $config->modelNames->name }} = store.list[index]
         itemId.value = id
     }
 }
