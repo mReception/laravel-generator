@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia';
 import {useQuasar} from 'quasar'
 import {{ $config->modelNames->camelPlural }}Service from 'src/services/{{ $config->modelNames->dashed }}.service';
-import { {{ $config->modelNames->name }} }  from 'src/models/{{ $config->modelNames->dashed }}';
+import {{ $config->modelNames->name }}  from 'src/models/{{ $config->modelNames->dashed }}';
 import { {{ $config->modelNames->name }}FormRequest } from 'src/models/requests/{{ $config->modelNames->name }}FormRequest';
 import OptionsSelect from 'src/models/common/options-select';
 import {PaginationForm} from 'src/models/requests/PaginationForm';
 import Pagination from 'src/models/common/pagination';
-import {Errors} from 'src/models/common/errors';
+import Errors from 'src/models/common/errors';
 
 const $q = useQuasar()
 
@@ -86,8 +86,9 @@ export const use{{ $config->modelNames->plural }} = defineStore('{{ $config->mod
                   this.{{ $config->modelNames->camelPlural }}Options = []
                   data.data.forEach((element: {{ $config->modelNames->name }} ) => this.{{ $config->modelNames->camelPlural }}Options.push({
                       id: element.id,
-                      name: element.name,
-                      field: '{{ $config->modelNames->camel }}_id',
+                      name: element.name??"",
+                      label: element.name??"",
+                      field: '{{ $config->modelNames->snake }}_id',
                       value: (element.id).toString()
                   }))
               }

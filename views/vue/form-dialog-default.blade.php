@@ -37,19 +37,18 @@ const store{{ $property['name_plural_title'] }} = use{{ $property['name_plural_t
 @endif
 @endforeach
 
-
 const saveModel = reactive({})
 const {setOptions, saveOrUpdate,setEnumSelect, loading} = baseFormHelper(store, saveModel, dbFieldsTypes)
 
 onMounted(async () => {
 @foreach($properties as $name => $property)
 @if($property['filter_type']==='enum')
-setEnumSelect('{{$property['field_name']}}', {{$property['class']}}Enum)
+    setEnumSelect('{{$property['field_name']}}', {{$property['class']}}Enum)
 @endif
 @endforeach
 @foreach($properties as $name => $property)
 @if($property['filter_type']==='select' && str_ends_with($property['field_name'],'_id'))
-setOptions('{{$property['field_name']}}', store{{ $property['name_plural_title'] }})
+    setOptions('{{$property['field_name']}}', store{{ $property['name_plural_title'] }})
 @endif
 @endforeach
 })

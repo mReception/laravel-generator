@@ -17,22 +17,22 @@ use {{ $config->namespaces->app }}\Http\Controllers\AppBaseController;
 class {{ $config->modelNames->name }}APIController extends AppBaseController
 {
     public function __construct(
-        private readonly {{ $config->modelNames->name }}Repository ${{ $config->modelNames->camel }}Repository,
-        private readonly {{ $config->modelNames->name }}ManageService ${{ $config->modelNames->camel }}ManageService
+        private readonly {{ $config->modelNames->name }}Repository $repository,
+        private readonly {{ $config->modelNames->name }}ManageService $service
     ) {}
 
     {!! $docIndex !!}
     public function index(Request $request): JsonResponse
     {
         if(empty($request->get('limit'))) {
-            ${{ $config->modelNames->camelPlural }} = $this->{{ $config->modelNames->camel }}Repository->all(
+            $result = $this->repository->all(
                 $request->except(['skip', 'limit']),
                 $request->get('skip'),
                 $request->get('limit'),
                 $request->get('columns')??['*']
             );
         } else {
-            ${{ $config->modelNames->camelPlural }} = $this->{{ $config->modelNames->camel }}Repository->paginate(
+            $result = $this->repository->paginate(
                 $request->get('limit'),
                 $request->get('columns')?? ['*'],
                 $request->get('skip'),
@@ -45,11 +45,11 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
 
 @if($config->options->localized)
         return $this->sendResponse(
-            ${{ $config->modelNames->camelPlural }}->toArray(),
+            $result->toArray(),
             __('messages.retrieved', ['model' => __('models/{{ $config->modelNames->camelPlural }}.plural')])
         );
 @else
-        return $this->sendResponse(${{ $config->modelNames->camelPlural }}->toArray(), '{{ $config->modelNames->humanPlural }} retrieved successfully');
+        return $this->sendResponse($result->toArray(), '{{ $config->modelNames->humanPlural }} retrieved successfully');
 @endif
     }
 
@@ -58,7 +58,7 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
     {
         $input = $request->all();
 
-        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}Service->create($input);
+        ${{ $config->modelNames->camel }} = $this->service->create($input);
 
 @if($config->options->localized)
         return $this->sendResponse(
@@ -74,7 +74,7 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
     public function show($id): JsonResponse
     {
         /** @var {{ $config->modelNames->name }} ${{ $config->modelNames->camel }} */
-        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}Repository->find($id);
+        ${{ $config->modelNames->camel }} = $this->repository->find($id);
 
         if (empty(${{ $config->modelNames->camel }})) {
 @if($config->options->localized)
@@ -102,7 +102,7 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
         $input = $request->all();
 
         /** @var {{ $config->modelNames->name }} ${{ $config->modelNames->camel }} */
-        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}Repository->find($id);
+        ${{ $config->modelNames->camel }} = $this->repository->find($id);
 
         if (empty(${{ $config->modelNames->camel }})) {
 @if($config->options->localized)
@@ -114,7 +114,7 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
 @endif
         }
 
-        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}Service->update($input, $id);
+        ${{ $config->modelNames->camel }} = $this->service->update($input, $id);
 
 @if($config->options->localized)
         return $this->sendResponse(
@@ -130,7 +130,7 @@ class {{ $config->modelNames->name }}APIController extends AppBaseController
     public function destroy($id): JsonResponse
     {
         /** @var {{ $config->modelNames->name }} ${{ $config->modelNames->camel }} */
-        ${{ $config->modelNames->camel }} = $this->{{ $config->modelNames->camel }}Repository->find($id);
+        ${{ $config->modelNames->camel }} = $this->repository->find($id);
 
         if (empty(${{ $config->modelNames->camel }})) {
 @if($config->options->localized)
